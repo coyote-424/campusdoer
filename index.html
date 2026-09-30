@@ -93,6 +93,7 @@ small.hint{color:var(--muted);display:block;margin-top:6px}
   opacity:0;transition:opacity .25s;pointer-events:none;box-shadow:0 10px 30px -10px #000a}
 .toast.show{opacity:1}
 .rateBtns button{padding:5px 10px;font-size:11px;margin-right:5px}
+.query{background:#14B8A614;border-left:3px solid var(--accent);padding:9px 12px;border-radius:8px;font-size:13px;margin-top:8px;line-height:1.5}
 .themebtn{border:1px solid var(--line2);background:transparent;color:var(--muted);width:30px;height:30px;
   border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 </style>
@@ -116,16 +117,20 @@ small.hint{color:var(--muted);display:block;margin-top:6px}
 const state = {
   role:'student', offline:false,
   tickets:[
-    {id:'T-101',cat:'Plumbing',loc:'Hostel B, Wing 2, Rm 214',urgency:'High',status:'In Progress',assignee:'Ramesh · Plumber',age:20},
-    {id:'T-102',cat:'Plumbing',loc:'Hostel B, Wing 2, Rm 208',urgency:'Medium',status:'Dispatched',assignee:'Ramesh · Plumber',age:30},
-    {id:'T-103',cat:'Electrical',loc:'Hostel C, Rm 118',urgency:'High',status:'Logged',assignee:'Unassigned',age:52},
+    {id:'T-101',cat:'Plumbing',studentName:'Rohan Das',hostel:'Hostel B',room:'214',desc:'Washroom tap loose and leaking continuously since yesterday',urgency:'High',status:'In Progress',assignedStaff:'Ramesh (Plumber)',age:20},
+    {id:'T-102',cat:'Plumbing',studentName:'Aarav Sharma',hostel:'Hostel B',room:'208',desc:'Very low water pressure in Wing 2 washroom',urgency:'Medium',status:'In Progress',assignedStaff:'Ramesh (Plumber)',age:30},
+    {id:'T-103',cat:'Electrical',studentName:'Priya Mohanty',hostel:'Hostel C',room:'118',desc:'Ceiling fan making vibrating grinding noise at speed 3',urgency:'High',status:'Logged',assignedStaff:'Kailash (Electrician)',age:52},
+    {id:'T-104',cat:'Mess',studentName:'Aarav Sharma',hostel:'Hostel B',room:'208',desc:'Mess dinner cold, shortage of dal',urgency:'Low',status:'Logged',assignedStaff:'Das (Mess Manager)',age:6},
   ],
-  passes:[], passSeq:1041,
+  passes:[{id:'GP-201',dest:'Cuttack (Home)',dep:'2026-10-02',ret:'2026-10-04',reason:'Family function',status:'Pending',otp:null,qr:false,studentName:'Priya Mohanty',room:'118',student:'Priya Mohanty · Rm 118'}],
+  passSeq:202,
+  student:{name:'Rohan Das',roll:'230110145',hostel:'Hostel B',room:'214'},
+  subjects:[{n:'Data Structures',att:19,tot:26},{n:'DBMS',att:17,tot:24},{n:'Mathematics',att:18,tot:25},{n:'Operating Systems',att:18,tot:25}],
   notices:[{tag:'3rd Yr · CSE',text:'Mid-sem lab schedule released — check timetable.'},
            {tag:'Hostel B',text:'Water tanker maintenance tomorrow 6–8 AM.'}],
   timetable:[{t:'9:00',s:'Data Structures',h:'LH-3',st:'Attended'},{t:'11:00',s:'Digital Logic',h:'LH-1',st:'Attended'},
              {t:'2:00',s:'DBMS Lab',h:'Lab-2',st:'Upcoming'}],
-  attendance:71, mess:{Good:14,OK:5,Poor:2},
+  mess:{Good:14,OK:5,Poor:2},
   isAdminLoggedIn:false, adminPin:'1234',
 };
 
@@ -156,9 +161,31 @@ function toggleOffline(){
 
 function submitPass(dest,dep,ret,reason){
   const id='GP-'+(state.passSeq++);
-  state.passes.unshift({id,dest,dep,ret,reason,status:'Pending',otp:null,qr:false,student:'Anika Rao · Rm 214B'});
+  const s=state.student;
+  state.passes.unshift({id,dest,dep,ret,reason,status:'Pending',otp:null,qr:false,studentName:s.name,room:s.room,student:s.name+' · Rm '+s.room});
   toast((state.offline?'Queued offline — ':'')+'Gate pass '+id+' submitted for approval');
   render();
+}
+const STAFF={Plumbing:'Ramesh (Plumber)',Electrical:'Kailash (Electrician)','Hostel Room':'Sunil (Carpenter)',Mess:'Das (Mess Manager)'};
+const STAFF_LIST=Object.values(STAFF);
+function myPasses(){return state.passes.filter(p=>p.studentName===state.student.name);}
+function attStats(){
+  const a=state.subjects.reduce((s,x)=>s+x.att,0), t=state.subjects.reduce((s,x)=>s+x.tot,0);
+  return {a,t,pct:Math.round(a/t*100),ok:a/t>=0.75,need:Math.max(0,Math.ceil((0.75*t-a)/0.25))};
+}
+function submitTicket(){
+  const s=state.student, cat=document.getElementById('mCat').value, urg=document.getElementById('mUrg').value;
+  const desc=document.getElementById('mDesc').value.trim();
+  if(!desc){toast('Add a short description of the issue');return;}
+  const id='T-'+(101+state.tickets.length);
+  state.tickets.unshift({id,cat,studentName:s.name,hostel:s.hostel,room:s.room,desc,urgency:urg,status:'Logged',assignedStaff:STAFF[cat],age:0});
+  toast(id+' logged and auto-routed to '+STAFF[cat]); render();
+}
+function setTicketStatus(id,st){state.tickets.find(t=>t.id===id).status=st;toast(id+' marked '+st);render();}
+function reassignTicket(id){
+  const t=state.tickets.find(t=>t.id===id);
+  t.assignedStaff=STAFF_LIST[(STAFF_LIST.indexOf(t.assignedStaff)+1)%STAFF_LIST.length];
+  toast(id+' reassigned to '+t.assignedStaff);render();
 }
 function approvePass(id){const p=state.passes.find(p=>p.id===id);p.status='Approved';p.otp=String(Math.floor(1000+Math.random()*9000));p.qr=true;toast(id+' approved — OTP generated');render();}
 function rejectPass(id){const p=state.passes.find(p=>p.id===id);p.status='Rejected';toast(id+' rejected');render();}
@@ -207,11 +234,20 @@ function ring(pct,color){
 
 function studentView(){
   return `
-  <div class="card" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
-    ${ring(state.attendance, state.attendance<75?'var(--bad)':'var(--ok)')}
-    <div><h2 style="margin:0">Attendance</h2>
-    <p class="meta" style="margin-top:4px">${state.attendance<75?'Below the 75% BPUT threshold — attend upcoming classes.':'Comfortably above the 75% threshold.'}</p></div>
-  </div>
+  <div class="card" style="padding:12px 18px"><span class="meta" style="margin:0">Logged in as: <b style="color:var(--ink)">${state.student.name}</b> · Roll: ${state.student.roll} · ${state.student.hostel}, Rm ${state.student.room}</span></div>
+  ${(()=>{const s=attStats();return `<div class="card" style="border-color:${s.ok?'#10B98155':'#EF444455'}">
+    <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+      ${ring(s.pct,s.ok?'var(--ok)':'var(--bad)')}
+      <div style="flex:1;min-width:220px">
+        <h2 style="margin:0 0 4px">Academic Attendance Pulse</h2>
+        <div style="font-size:13px">Classes Attended: <b>${s.a} / ${s.t}</b></div>
+        <div style="margin-top:8px">${s.ok?'<span class="pill ok">✓ Eligible for Semester Examinations</span>':`<span class="pill bad" style="white-space:normal;line-height:1.4">⚠️ Attendance Alert: ${s.pct}% (Below BPUT 75% Mandatory Cutoff — Risk of Examination Debarment)</span>`}</div>
+        <p class="meta">${s.ok?'You are above the BPUT 75% requirement.':`You need ${s.need} consecutive classes to cross the 75% threshold.`}</p>
+      </div>
+    </div>
+    <h3>Subject breakdown</h3>
+    <div class="grid4">${state.subjects.map(x=>{const p=Math.round(x.att/x.tot*100);return `<div class="metric"><span>${x.n}</span><b style="font-size:16px;color:${p<75?'var(--bad)':'var(--ink)'}">${x.att} / ${x.tot} · ${p}%</b></div>`;}).join('')}</div>
+  </div>`;})()}
   <div class="card"><h2>Today's Timetable</h2>
     ${state.timetable.map(x=>`<div class="item"><div><b>${x.t}</b> — ${x.s}<div class="meta">${x.h}</div></div><span class="pill ${x.st==='Attended'?'ok':'warn'}">${x.st}</span></div>`).join('')}
   </div>
@@ -223,13 +259,9 @@ function studentView(){
     </div>
     <label>Description</label><textarea id="mDesc" rows="2" placeholder="e.g. Leaking tap in washroom"></textarea>
     <label>Attachment</label><input type="file" disabled style="opacity:.5"> <small class="hint">Photo/voice preview (simulated)</small>
-    <button class="primary" onclick="(function(){
-      const c=document.getElementById('mCat').value,u=document.getElementById('mUrg').value;
-      state.tickets.unshift({id:'T-'+(100+state.tickets.length+1),cat:c,loc:'Hostel B, Rm 214',urgency:u,status:'Logged',assignee:'Unassigned',age:0});
-      toast('Complaint logged'); render();
-    })()">Submit Complaint</button>
+    <button class="primary" onclick="submitTicket()">Submit Complaint</button>
     <h3>Your Tickets</h3>
-    ${state.tickets.slice(0,3).map(t=>`<div class="item"><div><b>${t.cat}</b><div class="meta">${t.loc}</div></div><span class="pill ${statusTag(t.status)}">${t.status}</span></div>`).join('')}
+    ${state.tickets.filter(t=>t.studentName===state.student.name).map(t=>`<div class="item"><div><b>${t.id} · ${t.cat}</b> <span class="pill ${t.urgency==='High'?'bad':t.urgency==='Medium'?'warn':''}">${t.urgency}</span><div class="meta">${t.desc}</div><div class="meta">Assigned to ${t.assignedStaff}</div></div><span class="pill ${statusTag(t.status)}">${t.status}</span></div>`).join('')||'<p class="meta">No tickets yet.</p>'}
   </div>
   <div class="card">
     <h2>Gate Pass / Leave</h2>
@@ -238,7 +270,7 @@ function studentView(){
     <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" checked style="width:auto">Notify parent by SMS</label>
     <button class="primary" onclick="submitPass(document.getElementById('pDest').value||'HOME',document.getElementById('pDep').value||'—',document.getElementById('pRet').value||'—',document.getElementById('pReason').value||'—')">Request Gate Pass</button>
     <h3>Pass Ledger</h3>
-    ${state.passes.length?state.passes.map(p=>`
+    ${myPasses().length?myPasses().map(p=>`
       <div class="item"><div><b>${p.id}</b> → ${p.dest}<div class="meta">${p.dep} to ${p.ret}</div>${p.otp?`<div class="meta">Emergency OTP: <b style="color:var(--ink)">${p.otp}</b></div>`:''}</div>
       <div style="text-align:right">${p.qr?'<div class="qr" style="margin-left:auto"></div>':''}<span class="pill ${statusTag(p.status)}">${p.status}</span></div></div>`).join(''):'<p class="meta">No requests yet.</p>'}
   </div>
@@ -291,13 +323,22 @@ function adminView(){
     <button class="ghost" style="margin-top:10px">Escalate to Facilities</button></div>
   <div class="card"><h2>Gate Pass Approval Queue</h2>
     ${state.passes.filter(p=>p.status==='Pending').length?state.passes.filter(p=>p.status==='Pending').map(p=>`
-      <div class="item"><div><b>${p.id}</b> · ${p.student}<div class="meta">${p.dest} · ${p.dep}–${p.ret}</div></div>
+      <div class="item"><div><b>Pass #${p.id}</b> · ${p.studentName} (Rm ${p.room})<div class="meta">${p.dest} · ${p.dep} to ${p.ret}${p.reason?' · '+p.reason:''}</div></div>
       <div><button class="primary" style="margin:0 6px 0 0;padding:7px 13px" onclick="approvePass('${p.id}')">Approve</button>
       <button class="danger" onclick="rejectPass('${p.id}')">Reject</button></div></div>`).join(''):'<p class="meta">Queue clear.</p>'}
   </div>
   <div class="card"><h2>Maintenance Dispatch</h2>
-    ${state.tickets.map(t=>`<div class="item"><div><b>${t.id} · ${t.cat}</b><div class="meta">${t.loc} · ${t.assignee}</div></div>
-    <div style="text-align:right"><span class="pill ${ageTag(t.age)}">${t.age}h</span><br><span class="pill ${statusTag(t.status)}">${t.status}</span></div></div>`).join('')}
+    ${state.tickets.map(t=>`<div class="item" style="flex-direction:column;align-items:stretch">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <div><b>${t.id} · ${t.cat}</b><div class="meta">Reported by: ${t.studentName} · ${t.hostel}, Rm ${t.room}</div><div class="meta">Assigned to ${t.assignedStaff}</div></div>
+        <div style="text-align:right"><span class="pill ${ageTag(t.age)}">${t.age}h${t.age>48&&t.status!=='Resolved'?' · Overdue':''}</span> <span class="pill ${statusTag(t.status)}">${t.status}</span></div>
+      </div>
+      <div class="query">“${t.desc}”</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+        ${t.status==='Logged'?`<button class="ghost" onclick="setTicketStatus('${t.id}','In Progress')">Mark In Progress</button>`:''}
+        ${t.status!=='Resolved'?`<button class="ghost" onclick="setTicketStatus('${t.id}','Resolved')">Mark Resolved</button><button class="ghost" onclick="reassignTicket('${t.id}')">Reassign</button>`:''}
+        ${t.age>48&&t.status!=='Resolved'?`<button class="danger" onclick="toast('${t.id} escalated to Chief Warden')">Escalate</button>`:''}
+      </div></div>`).join('')}
   </div>`;
 }
 
