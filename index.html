@@ -1,917 +1,158 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Campus Doer · Digital Operations & Campus Services</title>
-<style>
-  :root{
-    --bg:#0D0F14;
-    --header:#12151D;
-    --card:#161922;
-    --card2:#1B1E28;
-    --chip:#202534;
-    --filter:#1B202D;
-    --border:#2A2F3D;
-    --filter-border:#2A3347;
-    --text:#EDEDF2;
-    --muted:#9BA3B2;
-    --terracotta:#C2410C;
-    --ochre:#D97706;
-    --green:#15803D;
-    --green-soft:#123322;
-    --red:#B91C1C;
-    --shadow:0 4px 16px rgba(0,0,0,.18);
-  }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Campus Doer · University Operations</title>
+<style>:root{--bg:#07080B;--card:#12151E;--inner:#171B25;--line:#1E2433;--divider:#1E2330;--text:#F3F4F6;--muted:#8F97A6;--terra:#C2410C;--green:#10B981;--amber:#F59E0B;--red:#EF4444}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Arial,sans-serif}body{min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}
+header{background:#07080B;border-bottom:1px solid var(--divider);position:sticky;top:0;z-index:20}.head{max-width:1500px;margin:auto;padding:18px 38px 15px;display:flex;justify-content:space-between;align-items:center;gap:24px}.brand{display:flex;gap:13px;align-items:center;min-width:250px}.logo{width:30px;height:30px;border:1px solid var(--terra);background:transparent;border-radius:0;display:grid;place-items:center;font-size:9px;font-weight:800;letter-spacing:.08em}.title{font-size:14px;font-weight:760;letter-spacing:.01em}.sub{font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:.02em}.header-actions{display:flex;align-items:center;gap:9px}.status,.sos,.tag{border-radius:999px;padding:6px 9px;font-size:10px;font-weight:700}.status{color:#6EE7B7;background:transparent;border:1px solid #145C46}.sos{color:#FCA5A5;background:transparent;border:1px solid #7F1D1D}
+.primary{max-width:1500px;margin:auto;padding:0 38px;display:flex;overflow:auto;gap:24px}.primary button{white-space:nowrap;background:transparent;color:var(--muted);border:0;border-bottom:2px solid transparent;padding:15px 0 13px;font-size:12px;font-weight:650;letter-spacing:.01em}.primary button:hover{color:var(--text)}.primary button.active{color:var(--text);border-color:var(--terra)}
+.layout{max-width:1500px;margin:auto;padding:52px 38px 72px;display:grid;grid-template-columns:minmax(260px,30%) minmax(0,70%);gap:72px}.intro{padding:0 0 24px}.eyebrow{color:var(--terra);font-size:10px;text-transform:uppercase;letter-spacing:.18em;font-weight:800;margin-bottom:12px}.intro h1{font-size:28px;line-height:1.12;margin:0 0 10px;letter-spacing:-.02em}.intro p,.meta{color:var(--muted);font-size:12px;line-height:1.6}.subnav{border-top:1px solid var(--divider)}.subnav button{width:100%;background:transparent;color:var(--muted);border:0;border-bottom:1px solid var(--divider);text-align:left;padding:16px 8px 16px 0;font-size:17px;line-height:1.25;font-weight:500;position:relative}.subnav button:hover{color:var(--text)}.subnav button.active{color:var(--text);font-weight:700;padding-left:18px}.subnav button.active:before{content:"";position:absolute;left:0;top:50%;width:6px;height:6px;background:var(--terra);transform:translateY(-50%)}.subnav button.active:after{content:""}
+.content{min-width:0;max-width:940px}.crumb{border-bottom:1px solid var(--divider);padding:0 0 18px;margin-bottom:30px}.crumb small{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.12em}.crumb h2{margin:7px 0 0;font-size:30px;line-height:1.1;letter-spacing:-.025em}.card{background:var(--card);border:1px solid var(--line);border-radius:2px;padding:30px;box-shadow:none}.card h3{font-size:17px;margin:0 0 16px}.stack{display:grid;gap:13px}.row{display:flex;justify-content:space-between;align-items:center;gap:18px}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}.metric{background:var(--card);padding:18px}.metric b{display:block;font-size:20px;margin-top:6px}.metric span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.divider{height:1px;background:var(--divider);margin:22px 0}
+button.primary,button.ghost,button.utility{border-radius:2px;padding:10px 14px;font-size:11.5px;font-weight:700}.primary{background:var(--terra);border:1px solid var(--terra);color:#F3F4F6}.ghost,.utility{background:transparent;border:1px solid var(--line);color:var(--text)}.ghost:hover,.utility:hover{border-color:var(--terra);color:#fff}.notice,.success,.warning,.danger{border-radius:2px;padding:12px 13px;font-size:11.5px;line-height:1.55}.notice{background:var(--inner);border:1px solid var(--line)}.success{background:#102A22;border:1px solid #145C46;color:#86EFAC}.warning{background:#2B2110;border:1px solid #6B4A0B;color:#FCD34D}.danger{background:#321518;border:1px solid #7F1D1D;color:#FCA5A5}.tag{background:var(--inner);border:1px solid var(--line);display:inline-block}.tag.green{background:#102A22;border-color:#145C46;color:#86EFAC}.tag.amber{background:#2B2110;border-color:#6B4A0B;color:#FCD34D}.tag.red{background:#321518;border-color:#7F1D1D;color:#FCA5A5}.tag.guardian{background:#351B12;border-color:var(--terra);color:#FDBA9A}
+input,select,textarea{width:100%;background:var(--inner);border:1px solid var(--line);border-radius:2px;color:var(--text);padding:11px 12px;outline:0}input:focus,select:focus,textarea:focus{border-color:var(--terra)}input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus{-webkit-text-fill-color:var(--text);-webkit-box-shadow:0 0 0 1000px var(--inner) inset;box-shadow:0 0 0 1000px var(--inner) inset;caret-color:var(--text)}select option{background:var(--inner);color:var(--text)}textarea{min-height:120px;resize:vertical}label.field{display:grid;gap:6px;color:var(--muted);font-size:11px}.form{display:grid;grid-template-columns:1fr 1fr;gap:13px}.full{grid-column:1/-1}.filters{display:flex;gap:7px;flex-wrap:wrap}.filters button{background:transparent;border:1px solid var(--line);color:var(--text);border-radius:999px;padding:6px 10px;font-size:10.5px}.filters button.active{background:#351B12;border-color:var(--terra)}
+table{width:100%;border-collapse:collapse;font-size:11.5px}th,td{text-align:left;padding:11px 6px;border-bottom:1px solid var(--divider);vertical-align:top}th{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.06em}tr:last-child td{border:0}.timeline{display:grid}.time{color:var(--terra);font-size:11px;font-weight:750}.timeline div{padding:15px 0;border-bottom:1px solid var(--divider)}.timeline div:last-child{border:0}.subject{display:grid;grid-template-columns:1fr auto;gap:12px;padding:14px 0;border-bottom:1px solid var(--divider)}.bar{height:5px;background:var(--inner);border-radius:0;margin-top:8px;overflow:hidden}.bar span{display:block;height:100%;background:var(--terra)}.ring{width:135px;height:135px;border-radius:50%;background:conic-gradient(var(--terra) 0 79.6%,var(--inner) 79.6%);display:grid;place-items:center;position:relative;flex:none}.ring:after{content:"";position:absolute;width:94px;height:94px;border-radius:50%;background:var(--card)}.ring b{position:relative;z-index:1;font-size:24px}.ring-wrap{display:flex;align-items:center;gap:28px}.empty{padding:28px;text-align:center;border:1px dashed var(--line);color:var(--muted);border-radius:2px}.terminal{background:#080A0E;border:1px solid var(--line);border-radius:2px;padding:15px;font:11px/1.7 ui-monospace,monospace;color:#A7F3D0;min-height:170px}.toast{display:none;position:fixed;right:20px;bottom:20px;background:var(--inner);border:1px solid var(--terra);padding:12px;border-radius:2px;font-size:11px;z-index:30}.toast.show{display:block}
+@media(max-width:1000px){.head{padding:16px 22px}.primary{padding:0 22px;gap:18px}.layout{grid-template-columns:260px minmax(0,1fr);gap:40px;padding:40px 22px 60px}.subnav button{font-size:15px}.metrics{grid-template-columns:1fr 1fr}}@media(max-width:720px){.layout{grid-template-columns:1fr;padding:28px 18px 48px;gap:30px}.subnav{display:block}.subnav button{font-size:16px}.content{max-width:none}.head{padding:14px 18px}.brand{min-width:0}.header-actions .status{display:none}.primary{padding:0 18px}.form{grid-template-columns:1fr}.full{grid-column:auto}.crumb h2{font-size:25px}.card{padding:22px}.ring-wrap{align-items:flex-start;flex-direction:column}}
 
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Arial,sans-serif}
-  body{min-height:100vh}
-  button,input,select,textarea{font:inherit}
-  button{cursor:pointer}
-
-  .app-header{
-    position:sticky;top:0;z-index:20;
-    background:var(--header);
-    border-bottom:1px solid var(--border);
-    padding:18px 24px 14px;
-  }
-  .header-row{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:18px}
-  .brand{display:flex;align-items:center;gap:12px;min-width:0}
-  .brand-mark{
-    width:38px;height:38px;border:1px solid var(--terracotta);border-radius:10px;
-    display:grid;place-items:center;color:#fff;background:rgba(194,65,12,.16);font-weight:800
-  }
-  h1{font-size:18px;line-height:1.2;margin:0;font-weight:750}
-  .subtitle{font-size:12px;color:var(--muted);margin-top:4px}
-  .header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-  .status-badge,.sos{
-    border:1px solid var(--border);border-radius:999px;padding:8px 11px;font-size:12px;white-space:nowrap
-  }
-  .status-badge{background:var(--green-soft);border-color:#1F6B3B;color:#86EFAC}
-  .sos{background:#321719;border-color:#7F1D1D;color:#FCA5A5}
-
-  .shell{max-width:1400px;margin:0 auto;padding:16px 24px 40px}
-  .nav{
-    display:flex;gap:8px;overflow-x:auto;padding:2px 0 14px;
-    scrollbar-width:thin;
-  }
-  .nav button{
-    flex:0 0 auto;background:var(--filter);border:1px solid var(--filter-border);color:var(--text);
-    border-radius:8px;padding:10px 13px;font-size:12.5px;font-weight:650;
-  }
-  .nav button:hover{border-color:var(--terracotta)}
-  .nav button.active{background:var(--terracotta);border-color:var(--terracotta);color:#fff}
-
-  main{min-height:500px}
-  .view-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin:12px 0 18px}
-  .view-head h2{font-size:24px;margin:0 0 5px}
-  .view-head p{margin:0;color:var(--muted);font-size:13px}
-  .eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--ochre);font-weight:750;margin-bottom:6px}
-
-  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
-  .col-12{grid-column:span 12}.col-8{grid-column:span 8}.col-7{grid-column:span 7}.col-6{grid-column:span 6}.col-5{grid-column:span 5}.col-4{grid-column:span 4}
-  .card{
-    background:var(--card);border:1px solid var(--border);border-radius:12px;padding:17px;box-shadow:var(--shadow)
-  }
-  .card h3{font-size:15px;margin:0 0 12px}
-  .card h4{font-size:13px;margin:0 0 7px}
-  .muted{color:var(--muted)}
-  .meta{font-size:12px;color:var(--muted)}
-  .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .stack{display:grid;gap:10px}
-  .divider{height:1px;background:var(--border);margin:13px 0}
-
-  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-  .metric{background:var(--chip);border:1px solid var(--border);border-radius:9px;padding:12px}
-  .metric .value{font-size:22px;font-weight:780;margin-top:4px}
-  .metric .label{font-size:11px;color:var(--muted)}
-  .notice{
-    border:1px solid #6B4614;background:#211A0F;border-radius:9px;padding:11px 12px;color:#FCD34D;font-size:12.5px
-  }
-  .success{
-    border:1px solid #1F6B3B;background:var(--green-soft);border-radius:9px;padding:11px 12px;color:#86EFAC;font-size:12.5px
-  }
-  .danger{
-    border:1px solid #7F1D1D;background:#321719;border-radius:9px;padding:11px 12px;color:#FCA5A5;font-size:12.5px
-  }
-
-  .ring-wrap{display:flex;align-items:center;gap:18px}
-  .ring{
-    width:132px;height:132px;border-radius:50%;display:grid;place-items:center;
-    background:conic-gradient(var(--terracotta) 0 72%, var(--chip) 72% 100%);
-    flex:0 0 auto;
-  }
-  .ring::after{
-    content:"";width:92px;height:92px;border-radius:50%;background:var(--card);position:absolute
-  }
-  .ring-content{position:relative;z-index:1;text-align:center}
-  .ring-content strong{display:block;font-size:26px;color:var(--text)}
-  .ring-content span{font-size:11px;color:var(--muted)}
-
-  .subject{
-    display:grid;grid-template-columns:1fr auto;gap:8px;padding:11px 0;border-bottom:1px solid var(--border)
-  }
-  .subject:last-child{border-bottom:0}
-  .subject-title{font-size:13px;font-weight:650}
-  .subject-bar{height:6px;background:var(--chip);border-radius:99px;overflow:hidden;margin-top:7px}
-  .subject-fill{height:100%;background:var(--terracotta);border-radius:99px}
-  .subject-pct{font-size:12px;font-weight:750}
-  .warning{color:#FBBF24}
-
-  table{width:100%;border-collapse:collapse;font-size:12.5px}
-  th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--border);vertical-align:top}
-  th{color:var(--muted);font-weight:650}
-  tr:last-child td{border-bottom:0}
-
-  .pill,.tag{
-    display:inline-flex;align-items:center;gap:5px;
-    background:var(--filter);border:1px solid var(--filter-border);color:var(--text);
-    border-radius:999px;padding:5px 8px;font-size:11px;font-weight:650
-  }
-  .tag.green{background:var(--green-soft);border-color:#1F6B3B;color:#86EFAC}
-  .tag.ochre{background:#211A0F;border-color:#6B4614;color:#FCD34D}
-  .tag.red{background:#321719;border-color:#7F1D1D;color:#FCA5A5}
-
-  button.primary{
-    background:var(--terracotta);border:1px solid var(--terracotta);color:#fff;
-    border-radius:8px;padding:9px 12px;font-weight:700
-  }
-  button.primary:hover{background:#E04A0F}
-  button.ghost,.utility-btn{
-    background:var(--filter);border:1px solid var(--filter-border);color:var(--text);
-    border-radius:8px;padding:8px 11px;font-weight:650;font-size:12px
-  }
-  button.ghost:hover,.utility-btn:hover{border-color:var(--terracotta);color:#fff}
-  button.danger-btn{background:#321719;border:1px solid #7F1D1D;color:#FCA5A5;border-radius:8px;padding:8px 11px;font-weight:650}
-  button:disabled{opacity:.55;cursor:not-allowed}
-
-  .filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
-  .filters button{
-    background:var(--filter);border:1px solid var(--filter-border);color:var(--text);
-    border-radius:999px;padding:7px 11px;font-size:12px
-  }
-  .filters button.active{border-color:var(--terracotta);color:#fff;background:#352016}
-  .filters button:hover{border-color:var(--terracotta)}
-
-  label.field{display:grid;gap:6px;font-size:12px;color:var(--muted)}
-  input,select,textarea{
-    width:100%;background:var(--card2);border:1px solid var(--border);color:var(--text);
-    border-radius:8px;padding:10px 11px;outline:none
-  }
-  input:focus,select:focus,textarea:focus{border-color:var(--terracotta)}
-  textarea{min-height:100px;resize:vertical}
-  select option{background:var(--card2);color:var(--text)}
-  .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
-  .full{grid-column:1/-1}
-
-  .timeline{display:grid;gap:9px}
-  .timeline-item{display:grid;grid-template-columns:145px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
-  .timeline-item:last-child{border-bottom:0}
-  .time{color:var(--ochre);font-size:12px;font-weight:700}
-
-  .big-number{font-size:30px;font-weight:800}
-  .progress{height:8px;background:var(--chip);border-radius:99px;overflow:hidden}
-  .progress > span{display:block;height:100%;background:var(--terracotta)}
-
-  .empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--border);border-radius:9px}
-  .toast{
-    position:fixed;right:20px;bottom:20px;z-index:50;display:none;
-    background:var(--card2);border:1px solid var(--terracotta);color:var(--text);
-    border-radius:9px;padding:12px 14px;box-shadow:var(--shadow);max-width:340px;font-size:12.5px
-  }
-  .toast.show{display:block}
-
-  @media(max-width:950px){
-    .col-8,.col-7,.col-6,.col-5,.col-4{grid-column:span 12}
-    .metrics{grid-template-columns:repeat(2,1fr)}
-  }
-  @media(max-width:600px){
-    .app-header{padding:14px}
-    .shell{padding:12px 14px 30px}
-    .header-row{align-items:flex-start}
-    .header-actions{display:none}
-    .metrics{grid-template-columns:1fr 1fr}
-    .ring-wrap{align-items:flex-start;flex-direction:column}
-    .form-grid{grid-template-columns:1fr}
-    .timeline-item{grid-template-columns:1fr}
-  }
+/* TIFF editorial menu flow */
+body{background:#08090C;color:#F3F4F6}header{position:sticky;top:0;background:#08090C;border-bottom:1px solid #1E222D;z-index:40}.head{max-width:none;padding:20px 44px 16px}.brand{min-width:0}.logo{border-color:#C2410C}.primary{max-width:none;padding:0 44px;gap:30px}.primary button{font-size:13px;padding:16px 0 14px}.primary button.active{border-color:#C2410C;color:#F3F4F6}.layout{display:block;max-width:1180px;margin:0 auto;padding:64px 44px 100px}.layout aside{display:none}.content{max-width:900px;margin:0 auto}.crumb{border:0;padding:0;margin:0 0 30px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px}.crumb small{display:block}.crumb h2{font-size:38px;margin-top:9px}.menu-back{background:transparent;border:1px solid #1E2433;color:#8F97A6;padding:9px 13px;border-radius:0;font-size:11px;font-weight:700;white-space:nowrap}.menu-back:hover{color:#F3F4F6;border-color:#C2410C}.card{background:#12151E;border:1px solid #1E2433;border-radius:0;padding:34px}.editorial-menu{position:fixed;inset:0;background:#08090C;z-index:100;overflow:auto;opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .18s ease,transform .18s ease,visibility .18s}.editorial-menu.open{opacity:1;visibility:visible;transform:translateY(0)}.menu-top{display:flex;align-items:center;justify-content:space-between;padding:24px 44px 20px;border-bottom:1px solid #1E222D;position:sticky;top:0;background:#08090C;z-index:2}.menu-brand{font-size:14px;font-weight:800;letter-spacing:.02em}.menu-brand span{color:#8F97A6;font-weight:500;margin-left:8px}.menu-close{border:0;background:transparent;color:#F3F4F6;font-size:28px;line-height:1;padding:2px 4px}.menu-close:hover{color:#C2410C}.menu-primary{display:flex;gap:28px;align-items:flex-end;padding:0 44px;border-bottom:1px solid #1E222D;overflow:auto}.menu-primary button{background:transparent;border:0;border-bottom:2px solid transparent;color:#8F97A6;padding:18px 0 16px;font-size:13px;font-weight:650;white-space:nowrap}.menu-primary button.active{color:#F3F4F6;border-color:#C2410C}.menu-body{max-width:1120px;margin:0 auto;padding:58px 44px 90px}.menu-eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#C2410C;font-weight:800;margin-bottom:12px}.menu-title{font-size:38px;line-height:1.05;margin:0 0 12px;letter-spacing:-.03em}.menu-desc{max-width:650px;color:#8F97A6;font-size:14px;line-height:1.65;margin:0 0 34px}.menu-list{border-top:1px solid #1E222D}.menu-list button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;text-align:left;background:transparent;color:#F3F4F6;border:0;border-bottom:1px solid #1E222D;padding:20px 4px;font-size:19px;line-height:1.35;font-weight:650}.menu-list button span{transition:transform .15s ease}.menu-list button:hover{color:#fff}.menu-list button:hover span{transform:translateX(6px);color:#C2410C}.menu-list button.active{font-weight:800}.menu-list button.active:before{content:"";width:7px;height:7px;background:#C2410C;display:inline-block;flex:none;margin-right:-8px}.menu-list button.active span{color:#C2410C}.menu-list button{display:grid;grid-template-columns:auto 1fr auto}.module-shell{max-width:900px;margin:0 auto}.module-shell .crumb{margin-bottom:28px}.module-shell .card{box-shadow:none}.field input:focus,.field select:focus,.field textarea:focus,input:focus,select:focus,textarea:focus{border-color:#C2410C;box-shadow:0 0 0 1px rgba(194,65,12,.18)}input,select,textarea{background:#141822!important;color:#F3F4F6!important;border-color:#1E2433!important}input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus{-webkit-text-fill-color:#F3F4F6;box-shadow:0 0 0 1000px #141822 inset!important;border:1px solid #1E2433!important;caret-color:#F3F4F6}.ghost,.utility{background:#141822}.tag{background:#141822}.toast{z-index:150}@media(max-width:800px){.head{padding:16px 20px}.primary{padding:0 20px;gap:20px}.layout{padding:42px 20px 70px}.menu-top{padding:18px 20px}.menu-primary{padding:0 20px;gap:20px}.menu-body{padding:44px 20px 70px}.menu-title{font-size:32px}.menu-list button{font-size:18px}.crumb h2{font-size:30px}}
 </style>
 </head>
 <body>
-
-<header class="app-header">
-  <div class="header-row">
-    <div class="brand">
-      <div class="brand-mark">CD</div>
-      <div>
-        <h1>Campus Doer</h1>
-        <div class="subtitle">Digital Operations &amp; Campus Services</div>
-      </div>
-    </div>
-    <div class="header-actions">
-      <span class="status-badge">● Operational</span>
-      <button class="sos" type="button" onclick="medicalSOS()">Medical SOS</button>
-    </div>
-  </div>
+<header>
+  <div class="head"><div class="brand"><div class="logo">CD</div><div><div class="title">Campus Doer</div><div class="sub">Digital Operations &amp; Campus Services</div></div></div><div class="header-actions"><span class="status">● Operational</span><button class="sos" onclick="medicalSOS()">Medical SOS</button></div></div>
+  <nav id="primaryNav" class="primary"></nav>
 </header>
-
-<div class="shell">
-  <nav id="nav" class="nav" aria-label="Campus views"></nav>
-  <main id="main"></main>
-</div>
-
-<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div class="layout"><main id="main" class="content"></main></div>
+<div id="editorialMenu" class="editorial-menu" aria-hidden="true"></div>
+<div id="toast" class="toast"></div>
 
 <script>
 "use strict";
 
-/* ----------------------------- State ----------------------------- */
-
-const state = {
-  role: "academics",
-  totalHostellers: 250,
-  studentsSkippingDinner: 14,
-  onLeave: 12,
-  studentSkippingDinner: false,
-
-  subjects: [
-    { n: "Mathematics", att: 22, tot: 26, credits: 4, grade: "Grade O" },
-    { n: "Basic Electrical (BE)", att: 18, tot: 24, credits: 4, grade: "Grade E" },
-    { n: "Chemistry", att: 20, tot: 25, credits: 4, grade: "Grade A" },
-    { n: "Universal Human Values (UHV)", att: 19, tot: 22, credits: 3, grade: "Grade O" },
-    { n: "Programming in C & DS", att: 21, tot: 26, credits: 4, grade: "Grade E" },
-    { n: "Basic Civil Engineering (BCE)", att: 17, tot: 24, credits: 3, grade: "Grade A" }
+const state={
+  activeSection:"academics",activeSubTab:"attendance",menuOpen:false,
+  totalHostellers:250,onLeave:12,studentsSkippingDinner:14,currentStudentSkippedDinner:false,
+  student:{name:"Rohan Das",roll:"230110145",program:"CSE 1st Year",isDayScholar:false,hostel:"Hostel B",room:"214",onCampus:true},
+  isParentLoggedIn:false,
+  parentPhone:"",parentRoll:"",
+  subjects:[
+    {n:"Mathematics",att:22,tot:26,credits:4,grade:"Grade O"},
+    {n:"Basic Electrical (BE)",att:18,tot:24,credits:4,grade:"Grade E"},
+    {n:"Chemistry",att:20,tot:25,credits:4,grade:"Grade A"},
+    {n:"Universal Human Values (UHV)",att:19,tot:22,credits:3,grade:"Grade O"},
+    {n:"Programming in C & DS",att:21,tot:26,credits:4,grade:"Grade E"},
+    {n:"Basic Civil Engineering (BCE)",att:17,tot:24,credits:3,grade:"Grade A"}
   ],
-
-  passes: [
-    { id: "GP-1042", student: "Priya Mohanty", room: "B-214", purpose: "Family visit", status: "Pending" },
-    { id: "GP-1038", student: "Aarav Sharma", room: "A-118", purpose: "Medical appointment", status: "Approved" }
+  passes:[
+    {id:"GP-1042",student:"Rohan Das",room:"214",purpose:"Family visit",status:"Pending"},
+    {id:"GP-1038",student:"Aarav Sharma",room:"A-118",purpose:"Medical appointment",status:"Approved"}
   ],
-
-  tickets: [
-    { id: "TKT-2401", category: "Hostel Maintenance", title: "Bathroom tap leak", status: "In Progress", age: "2h" },
-    { id: "TKT-2398", category: "Campus Wi-Fi", title: "Weak signal in LH-3", status: "Open", age: "5h" },
-    { id: "TKT-2387", category: "Others", title: "Lost ID card assistance", status: "Resolved", age: "1d" }
+  tickets:[
+    {id:"TKT-2401",category:"Plumbing",title:"Room water pressure",status:"In Progress",age:"2h"},
+    {id:"TKT-2398",category:"Electrical",title:"Geyser fault",status:"Logged",age:"5h"},
+    {id:"TKT-2387",category:"Others",title:"Fan repair",status:"Resolved",age:"1d"}
   ],
-
-  announcements: [
-    { category: "Academic", title: "Mid-semester examination form window", date: "30 Sep 2026", body: "Students should complete the examination form before the published deadline." },
-    { category: "Hostel", title: "Mess dinner headcount update", date: "30 Sep 2026", body: "Students skipping dinner should opt out by 6:00 PM to reduce food waste." },
-    { category: "Administrative", title: "Library access timing notice", date: "29 Sep 2026", body: "Updated evening access timing is available at the library help desk." },
-    { category: "Emergency", title: "Medical desk contact protocol", date: "28 Sep 2026", body: "Use Medical SOS for urgent campus medical assistance." }
+  parentTickets:[
+    {id:"G-771",title:"Room water pressure",status:"In Progress"},
+    {id:"G-764",title:"Geyser fault",status:"Logged"},
+    {id:"G-752",title:"Fan repair",status:"Resolved"}
   ],
-
-  bookings: [
-    { resource: "Seminar Hall", time: "Today · 4:00–6:00 PM", owner: "ECE Club", status: "Confirmed" },
-    { resource: "Projector Room", time: "Tomorrow · 11:00 AM–1:00 PM", owner: "Class Representative", status: "Pending" }
+  announcements:[
+    {category:"Academic",title:"Mid-semester examination form window",date:"30 Sep 2026",body:"Students should complete the examination form before the published deadline."},
+    {category:"Hostel",title:"Mess dinner headcount update",date:"30 Sep 2026",body:"Students skipping dinner should opt out by 6:00 PM."},
+    {category:"Administrative",title:"Library access timing notice",date:"29 Sep 2026",body:"Updated evening access timing is available at the library help desk."},
+    {category:"Emergency",title:"Medical desk contact protocol",date:"28 Sep 2026",body:"Use Medical SOS for urgent campus medical assistance."}
   ],
-
-  gateLog: [
-    { pass: "GP-1038", student: "Aarav Sharma", action: "Checkout", time: "4:18 PM" },
-    { pass: "GP-1029", student: "Rohan Das", action: "Check-in", time: "3:52 PM" }
-  ],
-
-  offlineMode: false,
-  wardenUnlocked: false,
-  announcementFilter: "All"
+  bookings:[],
+  gateLog:[{pass:"GP-1042",student:"Rohan Das",action:"Check-in",time:"6:05 PM"}],
+  lastTransit:{checkout:"—",destination:"Cuttack - Home",departureDate:"—",returnDate:"—",smsReceived:true},
+  guardianEscalations:[],
+  offlineMode:false,wardenUnlocked:false,announcementFilter:"All"
 };
 
-const NAV_ITEMS = [
-  ["academics", "Academics & Attendance"],
-  ["hostel", "Hostel & Living"],
-  ["grievances", "Campus Grievances & Repairs"],
-  ["announcements", "Announcements & Facilities"],
-  ["warden", "Warden Command"],
-  ["gate", "Gate Checkpoint"],
-  ["offgrid", "Off-Grid Resilience"]
+const sections=[
+ {id:"academics",label:"Academics & Attendance",desc:"Attendance, grades, credits, and the daily academic schedule.",tabs:[["attendance","Attendance Pulse & BPUT Calculator"],["subjects","Subject Breakdown"],["grades","Grades & CGPA Summary"],["timetable","Today's Timetable"]]},
+ {id:"hostel",label:"Hostel & Living",desc:"Gate passes, dining routines, and dinner headcount.",tabs:[["request-pass","Gate Pass / Outing Request"],["pass-history","Pass History & Emergency OTP"],["mess","Mess Routine & Meal Ratings"],["optout","Opt-Out Dinner Headcount"]]},
+ {id:"grievances",label:"Campus Grievances & Repairs",desc:"Report campus issues and follow your ticket ledger.",tabs:[["file-grievance","Universal Issue Reporting"],["ticket-ledger","Tracked Grievance Ledger"]]},
+ {id:"announcements",label:"Announcements & Facilities",desc:"Official circulars and simple campus resource booking.",tabs:[["circulars","Official Broadcast Feed"],["booking","Seminar Hall & Resource Booking"]]},
+ {id:"warden",label:"Warden Command",desc:"Residence headcount, pass approvals, maintenance operations, and guardian escalations.",tabs:[["warden-overview","Headcount Roster & Mess Forecast"],["warden-passes","Pass Approval Queue"],["maintenance","Maintenance Dispatch & SLA Tracking"]]},
+ {id:"gate",label:"Gate Checkpoint",desc:"Verify pass codes and maintain the live departure log.",tabs:[["verify","Pass Verification (OTP / QR)"],["departure","Gate Departure Log"]]},
+ {id:"offgrid",label:"Off-Grid Resilience",desc:"Essential workflows for weak connectivity and 2G fallback.",tabs:[["network","Network Offline Simulation"],["terminal","SMS / USSD Fallback Terminal"]]},
+ {id:"parent",label:"Parent Portal",desc:"Guardian Sentinel for ward status, transit, welfare, academics, and direct escalation.",tabs:[["ward-overview","Ward Real-Time Status"],["transit","Transit & Gate Exit History"],["nutrition","Mess Dining Activity"],["parent-academics","Attendance & BPUT 75% Check"],["ward-issues","Ward Maintenance & Grievances"],["parent-grievance","Direct Guardian Grievance Escalation"]]}
 ];
 
-/* ----------------------------- Utilities ----------------------------- */
+function esc(v){return String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
+function section(id){return sections.find(s=>s.id===id)||sections[0]}
+function tab(s){return s.tabs.find(t=>t[0]===state.activeSubTab)||s.tabs[0]}
+function att(s){return s.tot?Math.round(s.att/s.tot*100):0}
+function overall(){let a=0,t=0;state.subjects.forEach(s=>{a+=s.att;t+=s.tot});return t?Math.round(a/t*100):0}
+function meals(){return Math.max(0,state.totalHostellers-state.onLeave-state.studentsSkippingDinner)}
+function toast(m){const e=document.getElementById("toast");if(!e)return;e.textContent=m;e.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("show"),2400)}
+function medicalSOS(){if(confirm("Send a Medical SOS request to the campus medical desk?"))toast("Medical SOS sent.")}
 
-function escapeHtml(value) {
-  return String(value == null ? "" : value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
+function setSection(id){const s=section(id);state.activeSection=s.id;state.activeSubTab=s.tabs[0][0];state.menuOpen=true;render()}
+function selectSubTab(id){const s=section(state.activeSection);if(s.tabs.some(t=>t[0]===id)){state.activeSubTab=id;state.menuOpen=false;render()}}
+function closeMenu(){state.menuOpen=false;render()}
+function renderNav(){const n=document.getElementById("primaryNav"),s=section(state.activeSection);n.innerHTML=sections.map(x=>'<button class="'+(x.id===s.id?"active":"")+'" onclick="setSection(\''+x.id+'\')">'+esc(x.label)+'</button>').join("");renderEditorialMenu()}
+function renderEditorialMenu(){const el=document.getElementById("editorialMenu"),s=section(state.activeSection);el.classList.toggle("open",!!state.menuOpen);el.setAttribute("aria-hidden",state.menuOpen?"false":"true");el.innerHTML='<div class="menu-top"><div class="menu-brand">Campus Doer <span>· Digital Operations &amp; Campus Services</span></div><button class="menu-close" aria-label="Close menu" onclick="closeMenu()">✕</button></div><nav class="menu-primary">'+sections.map(x=>'<button class="'+(x.id===s.id?"active":"")+'" onclick="setSection(\''+x.id+'\')">'+esc(x.label)+'</button>').join("")+'</nav><div class="menu-body"><div class="menu-eyebrow">Campus Doer · Editorial Menu</div><h1 class="menu-title">'+esc(s.label)+'</h1><p class="menu-desc">'+esc(s.desc)+'</p><div class="menu-list">'+s.tabs.map((t,i)=>'<button class="'+(t[0]===state.activeSubTab?"active":"")+'" onclick="selectSubTab(\''+t[0]+'\')"><span></span><span>'+esc(t[1])+'</span><span>→</span></button>').join("")+'</div></div>'} 
+function head(s,t){return '<div class="crumb"><div><small>'+esc(s.label)+' / '+esc(t[1])+'</small><h2>'+esc(t[1])+'</h2></div><button class="menu-back" onclick="state.menuOpen=true;render()">← Menu</button></div>'}
+function card(x){return '<section class="card">'+x+'</section>'}
 
-function showToast(message) {
-  const toast = document.getElementById("toast");
-  if (!toast) return;
-  toast.textContent = message;
-  toast.classList.add("show");
-  window.clearTimeout(showToast.timer);
-  showToast.timer = window.setTimeout(function () {
-    toast.classList.remove("show");
-  }, 2600);
-}
+function toggleSkipDinner(v){v=!!v;if(v&&!state.currentStudentSkippedDinner)state.studentsSkippingDinner++;if(!v&&state.currentStudentSkippedDinner)state.studentsSkippingDinner=Math.max(0,state.studentsSkippingDinner-1);state.currentStudentSkippedDinner=v;render();toast(v?"Dinner opt-out recorded.":"Dinner opt-out cancelled.")}
+function submitPass(e){e.preventDefault();const f=document.getElementById("passForm"),d=new FormData(f),id="GP-"+(1050+state.passes.length);state.passes.unshift({id,student:d.get("student")||"Student",room:d.get("room")||"214",purpose:d.get("purpose")||"Personal work",status:"Pending"});f.reset();render();toast(id+" submitted.")}
+function submitTicket(e){e.preventDefault();const f=document.getElementById("ticketForm"),d=new FormData(f),id="TKT-"+(2410+state.tickets.length);state.tickets.unshift({id,category:d.get("category")||"Others",title:d.get("title")||"Campus issue",status:"Logged",age:"now"});f.reset();render();toast(id+" logged.")}
+function setTicketStatus(i,status){if(state.tickets[i]){state.tickets[i].status=status;render();toast(state.tickets[i].id+" marked "+status+".")}}
+function reassignTicket(i){if(state.tickets[i])toast(state.tickets[i].id+" reassigned to campus maintenance.")}
+function setFilter(f){state.announcementFilter=f;render()}
+function bookResource(r){state.bookings.unshift({resource:r,time:"Requested · pending approval",owner:"Student",status:"Pending"});render();toast(r+" booking requested.")}
+function approvePass(i){if(state.passes[i]){state.passes[i].status="Approved";render();toast(state.passes[i].id+" approved.")}}
+function rejectPass(i){if(state.passes[i]){state.passes[i].status="Rejected";render();toast(state.passes[i].id+" rejected.")}}
+function unlockWarden(e){e.preventDefault();if(document.getElementById("wardenPin").value==="1234"){state.wardenUnlocked=true;render();toast("Warden Command unlocked.")}else toast("Incorrect demo PIN.")}
+function lockWarden(){state.wardenUnlocked=false;render()}
+function verifyPass(e){e.preventDefault();const v=document.getElementById("passCode").value.trim(),r=document.getElementById("verifyResult");if(v==="1042"||v==="GP-1042"){state.student.onCampus=false;state.lastTransit={checkout:"6:18 PM",destination:"Cuttack - Home",departureDate:"30 Sep 2026",returnDate:"2 Oct 2026",smsReceived:true};if(!state.gateLog.some(x=>x.pass==="GP-1042"&&x.action==="Checkout"))state.gateLog.unshift({pass:"GP-1042",student:"Rohan Das",action:"Checkout",time:"6:18 PM"});r.className="success";r.textContent="Verified · GP-1042 · Rohan Das · Cuttack - Home. Campus status updated to Checked Out."}else if(v==="1038"||v==="GP-1038"){r.className="success";r.textContent="Verified · GP-1038 · Aarav Sharma · A-118."}else{r.className="danger";r.textContent="Pass not verified."}render()}
+function gateCheckout(){state.student.onCampus=false;state.lastTransit={checkout:"Just now",destination:"Cuttack - Home",departureDate:"30 Sep 2026",returnDate:"2 Oct 2026",smsReceived:true};state.gateLog.unshift({pass:"GP-1042",student:"Rohan Das",action:"Checkout",time:"Just now"});render();toast("Rohan Das checkout logged.")}
+function toggleOffline(){state.offlineMode=!state.offlineMode;render();toast(state.offlineMode?"Offline / 2G simulation enabled.":"Online mode restored.")}
+function terminal(e){e.preventDefault();const i=document.getElementById("termIn"),o=document.getElementById("termOut"),c=i.value.trim().toUpperCase();o.textContent=c==="MESS"?"MESS · DINNER FORECAST "+meals()+" MEALS":c==="STATUS"?"STATUS · "+(state.offlineMode?"OFFLINE/2G":"ONLINE"):c==="PASS"?"PASS · OTP 1042":c==="SOS"?"SOS · MEDICAL ALERT QUEUED":c==="HELP"?"COMMANDS · STATUS / MESS / PASS / SOS":"OK · COMMAND QUEUED";i.value=""}
 
-function attendancePercent(subject) {
-  if (!subject.tot) return 0;
-  return Math.round((subject.att / subject.tot) * 100);
-}
+function loginParent(){const pin=document.getElementById("parentPin").value.trim();const roll=document.getElementById("parentRoll").value.trim();const phone=document.getElementById("parentPhone").value.trim();state.parentPhone=phone;state.parentRoll=roll;const err=document.getElementById("parentPinError");if(pin==="0000"||pin==="1234"||pin===""){state.isParentLoggedIn=true;if(err){err.textContent="";err.style.display="none"}toast("Guardian Authenticated — Access Granted");render()}else{if(err){err.textContent="Invalid PIN. Use default PIN: 0000";err.style.display="block"}}}
+function loginParent(){const pin=document.getElementById("parentPin").value.trim();const roll=document.getElementById("parentRoll").value.trim();if(pin==="0000"||pin==="1234"||pin===""){state.isParentLoggedIn=true;state.parentRoll=roll;const err=document.getElementById("parentPinError");if(err)err.style.display="none";toast("Guardian Authenticated — Access Granted");render()}else{const err=document.getElementById("parentPinError");if(err){err.textContent="Invalid PIN. Use default PIN: 0000";err.style.display="block"}}}
+function parentLogout(){state.isParentLoggedIn=false;render();toast("Parent Portal locked.")}
+function submitGuardian(e){e.preventDefault();const f=document.getElementById("guardianForm"),d=new FormData(f),id="G-"+(780+state.guardianEscalations.length);state.guardianEscalations.unshift({id,category:d.get("category"),details:d.get("details"),time:"Just now"});f.reset();render();toast("Guardian grievance "+id+" sent to Warden Command.")}
+function parentGuard(){return state.isParentLoggedIn?"" : card('<h3>Confidential Guardian Access</h3><p class="meta">Enter Registered Parent Phone / Ward Roll Number and the 4-digit PIN.</p><div class="stack"><label class="field">Registered Parent Phone<input id="parentPhone" name="phone" value="9876543210" required inputmode="numeric" autocomplete="tel" placeholder="9876543210"></label><label class="field">Ward Roll Number<input id="parentRoll" name="roll" value="230110145" required inputmode="numeric" autocomplete="off"></label><label class="field">4-digit PIN<input id="parentPin" name="pin" value="0000" required maxlength="4" inputmode="numeric" type="password" autocomplete="off" onkeydown="if(event.key===&quot;Enter&quot;){event.preventDefault();loginParent()}"></label><div id="parentPinError" class="danger" style="display:none"></div><div class="notice"><strong>Confidential Guardian Access</strong> — Limited exclusively to the verified guardian of Rohan Das (Roll: 230110145).</div><button class="primary" type="button" onclick="loginParent()">Enter Parent Portal</button></div>')}
+function parentWrap(s,t,body){if(!state.isParentLoggedIn)return head(s,t)+parentGuard();return head(s,t)+body}
+function parentOverview(){const s=section("parent"),t=["ward-overview","Ward Overview & Status"];if(!state.isParentLoggedIn)return parentWrap(s,t,"");return parentWrap(s,t,card('<div class="row"><h3>Ward Overview & Status</h3><button class="ghost" onclick="parentLogout()">Lock Portal</button></div><div class="metrics"><div class="metric"><span>Student</span><b>Rohan Das</b></div><div class="metric"><span>Program</span><b>CSE 1st Year</b></div><div class="metric"><span>Residence</span><b>Hostel B · Rm 214</b></div><div class="metric"><span>Campus</span><b style="color:'+(state.student.onCampus?"#10B981":"#F59E0B")+'">'+(state.student.onCampus?"● Currently On Campus":"● Checked Out of Campus")+'</b></div></div><div class="divider"></div><div class="'+(state.student.onCampus?"success":"warning")+'"><strong>Campus status:</strong> '+(state.student.onCampus?"Currently On Campus":"Checked Out of Campus")+'</div><div class="divider"></div><h3>Mess Dining Status</h3><p class="meta">'+(state.student.isDayScholar?"Dining tracking is disabled for Day Scholars.":(state.currentStudentSkippedDinner?"Opted Out / Eating Outside":"Eating at Mess"))+'</p>'))}
 
-function aggregateAttendance() {
-  let attended = 0;
-  let total = 0;
-  state.subjects.forEach(function (subject) {
-    attended += subject.att;
-    total += subject.tot;
-  });
-  return total ? Math.round((attended / total) * 100) : 0;
-}
+function parentTransit(){const s=section("parent"),t=["transit","Gate & Campus Transit Log"];return parentWrap(s,t,card('<h3>Gate & Campus Transit Log</h3><div class="metrics"><div class="metric"><span>Last checkout</span><b>'+esc(state.lastTransit.checkout)+'</b></div><div class="metric"><span>Destination</span><b>'+esc(state.lastTransit.destination)+'</b></div><div class="metric"><span>Departure date</span><b>'+esc(state.lastTransit.departureDate)+'</b></div><div class="metric"><span>Scheduled return</span><b>'+esc(state.lastTransit.returnDate)+'</b></div></div><div class="divider"></div><div class="'+(state.lastTransit.smsReceived?"success":"warning")+'">'+(state.lastTransit.smsReceived?"✓ Parent SMS notification received for leave approval.":"SMS notification has not been recorded.")+'</div><div class="divider"></div><table><thead><tr><th>Pass</th><th>Ward</th><th>Action</th><th>Time</th></tr></thead><tbody>'+state.gateLog.map(x=>'<tr><td>'+esc(x.pass)+'</td><td>'+esc(x.student)+'</td><td>'+esc(x.action)+'</td><td>'+esc(x.time)+'</td></tr>').join("")+'</tbody></table>'))}
 
-function projectedMeals() {
-  return Math.max(0, state.totalHostellers - state.studentsSkippingDinner - state.onLeave);
-}
+function parentNutrition(){const s=section("parent"),t=["nutrition","Mess & Nutrition Tracking"];if(state.student.isDayScholar)return parentWrap(s,t,card('<h3>Mess & Nutrition Tracking</h3><div class="notice">Dining tracking is disabled for Day Scholars.</div>'));return parentWrap(s,t,card('<h3>Mess & Nutrition Tracking</h3><div class="'+(state.currentStudentSkippedDinner?"warning":"success")+'"><strong>Tonight’s Dinner:</strong> '+(state.currentStudentSkippedDinner?"Opted Out / Eating Outside":"Eating at Mess")+'</div><div class="divider"></div><h4>Recent meal feedback</h4><table><thead><tr><th>Date</th><th>Meal</th><th>Ward rating</th></tr></thead><tbody><tr><td>30 Sep</td><td>Dinner</td><td><span class="tag green">Good</span></td></tr><tr><td>30 Sep</td><td>Lunch</td><td><span class="tag">OK</span></td></tr><tr><td>29 Sep</td><td>Dinner</td><td><span class="tag">OK</span></td></tr></tbody></table>'))}
 
-function mealOptOutMessage() {
-  return "Dinner forecast: " + projectedMeals() + " meals to prepare (" +
-    (state.studentsSkippingDinner + state.onLeave) +
-    " students opted out or are on approved leave).";
-}
+function parentAcademics(){const s=section("parent"),t=["parent-academics","Academic Attendance & Grades"];return parentWrap(s,t,card('<h3>Academic Attendance & Grades</h3><div class="ring-wrap"><div class="ring"><b>79.6%</b></div><div><div class="success"><strong>Ward is eligible for semester examinations.</strong></div><p class="meta">Statutory BPUT cutoff: 75%. Guardian view is read-only.</p></div></div><div class="divider"></div><div class="metrics"><div class="metric"><span>Attendance</span><b>79.6%</b></div><div class="metric"><span>BPUT cutoff</span><b>75%</b></div><div class="metric"><span>SGPA</span><b>8.40</b></div><div class="metric"><span>CGPA</span><b>8.64</b></div></div><div class="divider"></div><div class="row"><span class="meta">Credit completion</span><strong>22 credits tracked</strong></div>'))}
 
-function setRole(role) {
-  const allowed = NAV_ITEMS.some(function (item) { return item[0] === role; });
-  state.role = allowed ? role : "academics";
-  render();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
+function parentIssues(){const s=section("parent"),t=["ward-issues","Ward Maintenance & Grievances"];return parentWrap(s,t,card('<h3>Ward Maintenance & Grievances</h3><table><thead><tr><th>Complaint</th><th>Status</th></tr></thead><tbody>'+state.parentTickets.map(x=>'<tr><td>'+esc(x.title)+'</td><td><span class="tag '+(x.status==="Resolved"?"green":x.status==="In Progress"?"amber":"")+'">'+esc(x.status)+'</span></td></tr>').join("")+'</tbody></table>'))}
 
-function medicalSOS() {
-  const ok = window.confirm("Send a Medical SOS request to the campus medical desk?");
-  if (ok) showToast("Medical SOS sent to the campus medical desk.");
-}
+function parentGrievance(){const s=section("parent"),t=["parent-grievance","Parent Direct Grievance / Escalation"];return parentWrap(s,t,card('<h3>Direct Guardian Channel</h3><p class="meta">Lodge a concern directly with the Chief Warden / Dean. Every submission is tagged as a Guardian Escalation in Warden Command.</p><form id="guardianForm" onsubmit="submitGuardian(event)" class="form"><label class="field full">Category<select name="category"><option>Hostel Living Conditions</option><option>Mess Food Quality</option><option>Academic / Faculty Concerns</option><option>Medical / Health Issue</option><option>Safety &amp; Anti-Ragging</option><option>Others</option></select></label><label class="field full">Details<textarea name="details" required placeholder="Describe your concern and requested follow-up."></textarea></label><div class="full"><button class="primary" type="submit" style="font-size:12px;padding:11px 14px">Submit Guardian Grievance</button></div></form><div class="divider"></div>'+(state.guardianEscalations.length?state.guardianEscalations.map(x=>'<div class="notice"><span class="tag guardian">[Guardian Escalation]</span><strong style="margin-left:7px">'+esc(x.id)+'</strong><div class="meta">'+esc(x.category)+' · '+esc(x.time)+'</div></div>').join(""):"<div class=\"meta\">No guardian escalations submitted in this session.</div>")))}
 
-function toggleSkipDinner(skipping) {
-  const next = Boolean(skipping);
-  if (next && !state.studentSkippingDinner) {
-    state.studentsSkippingDinner += 1;
-  } else if (!next && state.studentSkippingDinner) {
-    state.studentsSkippingDinner = Math.max(0, state.studentsSkippingDinner - 1);
-  }
-  state.studentSkippingDinner = next;
-  render();
-  showToast(next ? "Dinner opt-out recorded." : "Dinner opt-out cancelled.");
-}
+function academicsTool(){const s=section("academics"),t=tab(s);if(t[0]==="attendance")return head(s,t)+card('<h3>Attendance Pulse &amp; BPUT Calculator</h3><div class="ring-wrap"><div class="ring"><b>79.6%</b></div><div class="stack" style="flex:1"><div class="metrics"><div class="metric"><span>Overall</span><b>79.6%</b></div><div class="metric"><span>BPUT cutoff</span><b>75%</b></div><div class="metric"><span>SGPA</span><b>8.40</b></div><div class="metric"><span>CGPA</span><b>8.64</b></div></div><div class="success"><strong>Above BPUT cutoff.</strong> Current first-year attendance pulse is 79.6%.</div></div></div>');if(t[0]==="subjects")return head(s,t)+card('<h3>Subject Breakdown</h3>'+state.subjects.map(x=>'<div class="subject"><div><strong>'+esc(x.n)+'</strong><div class="meta">'+x.att+' / '+x.tot+' classes · '+x.credits+' credits · '+esc(x.grade)+'</div><div class="bar"><span style="width:'+att(x)+'%"></span></div></div><strong>'+att(x)+'%</strong></div>').join(""));if(t[0]==="grades")return head(s,t)+card('<h3>Grades &amp; CGPA Summary</h3><div class="metrics"><div class="metric"><span>SGPA</span><b>8.40</b></div><div class="metric"><span>CGPA</span><b>8.64</b></div><div class="metric"><span>Credits</span><b>22</b></div><div class="metric"><span>Subjects</span><b>6</b></div></div>');return head(s,t)+card('<h3>Today’s Timetable</h3><div class="timeline"><div><span class="time">8:00 – 10:45 AM</span><br><strong>Chemistry Lab</strong></div><div><span class="time">10:45 – 11:40 AM</span><br><strong>Break / Recess</strong></div><div><span class="time">11:40 AM – 12:35 PM</span><br><strong>Basic Electrical (BE)</strong></div><div><span class="time">12:35 – 1:30 PM</span><br><strong>Programming in C &amp; DS</strong></div><div><span class="time">1:30 – 2:25 PM</span><br><strong>Basic Civil Engineering (BCE)</strong></div></div>')}
 
-function submitPass(event) {
-  if (event) event.preventDefault();
-  const form = document.getElementById("passForm");
-  if (!form) return;
-  const data = new FormData(form);
-  const id = "GP-" + String(1050 + state.passes.length);
-  state.passes.unshift({
-    id: id,
-    student: data.get("student") || "Student",
-    room: data.get("room") || "—",
-    purpose: data.get("purpose") || "Personal",
-    status: "Pending"
-  });
-  form.reset();
-  render();
-  showToast("Outing request " + id + " submitted.");
-}
+function hostelTool(){const s=section("hostel"),t=tab(s);if(t[0]==="request-pass")return head(s,t)+card('<h3>Request Gate Pass</h3><form id="passForm" onsubmit="submitPass(event)" class="form"><label class="field">Student name<input name="student" value="Rohan Das" required></label><label class="field">Room<input name="room" value="214" required></label><label class="field full">Purpose<select name="purpose"><option>Family visit</option><option>Medical appointment</option><option>Personal work</option><option>Academic activity</option></select></label><div class="full"><button class="primary">Submit Gate Pass Request</button></div></form>');if(t[0]==="pass-history")return head(s,t)+card('<h3>My Pass History &amp; OTP</h3><table><thead><tr><th>Pass</th><th>Purpose</th><th>Status</th></tr></thead><tbody>'+state.passes.map(x=>'<tr><td>'+esc(x.id)+'</td><td>'+esc(x.purpose)+'</td><td><span class="tag '+(x.status==="Approved"?"green":x.status==="Rejected"?"red":"amber")+'">'+esc(x.status)+'</span></td></tr>').join("")+'</tbody></table><div class="divider"></div><div class="notice">Demo OTP: <strong>1042</strong> · Gate verification updates Parent Portal campus status.</div>');if(t[0]==="mess")return head(s,t)+card('<h3>Mess Timings &amp; Routine</h3><div class="timeline"><div><span class="time">7:00–8:00 AM</span><br><strong>Breakfast</strong></div><div><span class="time">2:30–3:30 PM</span><br><strong>Lunch</strong></div><div><span class="time">5:00–5:45 PM</span><br><strong>Snacks</strong></div><div><span class="time">8:00–9:30 PM</span><br><strong>Dinner</strong></div></div>');return head(s,t)+card('<h3>Opt-Out Dinner Headcount</h3><div class="success"><strong>Meals to prepare: '+meals()+'</strong> · 250 − 12 on leave − '+state.studentsSkippingDinner+' opted out.</div><label style="display:flex;gap:8px;align-items:center;margin-top:14px"><input type="checkbox" '+(state.currentStudentSkippedDinner?"checked":"")+' onchange="toggleSkipDinner(this.checked)"> I will NOT be eating dinner today (Opt-out)</label>')}
 
-function submitTicket(event) {
-  if (event) event.preventDefault();
-  const form = document.getElementById("ticketForm");
-  if (!form) return;
-  const data = new FormData(form);
-  const id = "TKT-" + String(2410 + state.tickets.length);
-  state.tickets.unshift({
-    id: id,
-    category: data.get("category") || "Others",
-    title: data.get("title") || "Campus issue",
-    status: "Open",
-    age: "now"
-  });
-  form.reset();
-  render();
-  showToast("Ticket " + id + " submitted.");
-}
+function grievanceTool(){const s=section("grievances"),t=tab(s);if(t[0]==="file-grievance")return head(s,t)+card('<h3>File a Grievance</h3><form id="ticketForm" onsubmit="submitTicket(event)" class="form"><label class="field">Category<select name="category"><option>Plumbing</option><option>Electrical</option><option>Campus Wi-Fi / Labs</option><option>Classroom Furniture</option><option>Canteen Hygiene</option><option>Ragging / Noise</option><option>Others</option></select></label><label class="field">Issue title<input name="title" required></label><label class="field full">Details<textarea name="details"></textarea></label><label class="full" style="display:flex;gap:8px;align-items:center"><input type="checkbox" name="anonymous"> Submit as Anonymous Report</label><div class="full"><button class="primary">File Grievance</button></div></form>');return head(s,t)+card('<h3>My Ticket Ledger</h3><table><thead><tr><th>Ticket</th><th>Category</th><th>Issue</th><th>Status</th><th>Action</th></tr></thead><tbody>'+state.tickets.map((x,i)=>'<tr><td>'+esc(x.id)+'</td><td>'+esc(x.category)+'</td><td>'+esc(x.title)+'</td><td><span class="tag '+(x.status==="Resolved"?"green":x.status==="In Progress"?"amber":"")+'">'+esc(x.status)+'</span></td><td><button class="ghost" onclick="setTicketStatus('+i+',\'Resolved\')">Mark Resolved</button></td></tr>').join("")+'</tbody></table>')}
 
-function approvePass(index) {
-  if (!state.passes[index]) return;
-  state.passes[index].status = "Approved";
-  render();
-  showToast(state.passes[index].id + " approved.");
-}
+function announcementTool(){const s=section("announcements"),t=tab(s);if(t[0]==="circulars"){const fs=["All","Academic","Hostel","Administrative","Emergency"],v=state.announcements.filter(x=>state.announcementFilter==="All"||x.category===state.announcementFilter);return head(s,t)+card('<div class="filters">'+fs.map(f=>'<button class="'+(state.announcementFilter===f?"active":"")+'" onclick="setFilter(\''+f+'\')">'+f+'</button>').join("")+'</div>'+(v.length?v.map(x=>'<div class="divider"><span class="tag">'+esc(x.category)+'</span><h4>'+esc(x.title)+'</h4><div class="meta">'+esc(x.body)+'</div></div>').join(""):'<div class="empty">No circulars.</div>'))}return head(s,t)+card('<h3>Seminar Hall / Resource Booking</h3>'+["Seminar Hall","Projector Room","Club Lawn"].map(r=>'<div class="row" style="padding:12px 0;border-bottom:1px solid var(--divider)"><div><strong>'+r+'</strong><div class="meta">Available for student request</div></div><button class="utility" onclick="bookResource(\''+r+'\')">Request Booking</button></div>').join("")+'<div class="divider"></div><table><thead><tr><th>Resource</th><th>Owner</th><th>Status</th></tr></thead><tbody>'+state.bookings.map(x=>'<tr><td>'+esc(x.resource)+'</td><td>'+esc(x.owner)+'</td><td>'+esc(x.status)+'</td></tr>').join("")+'</tbody></table>')}
 
-function rejectPass(index) {
-  if (!state.passes[index]) return;
-  state.passes[index].status = "Rejected";
-  render();
-  showToast(state.passes[index].id + " rejected.");
-}
+function wardenTool(){const s=section("warden"),t=tab(s);if(!state.wardenUnlocked)return head(s,t)+card('<h3>Secure Warden Access</h3><p class="meta">Demo PIN: 1234</p><form onsubmit="unlockWarden(event)" class="stack"><input id="wardenPin" type="password" placeholder="Warden PIN"><button class="primary">Unlock</button></form>');if(t[0]==="warden-overview")return head(s,t)+card('<div class="row"><h3>Overview &amp; Headcount Roster</h3><button class="ghost" onclick="lockWarden()">Lock</button></div><div class="metrics"><div class="metric"><span>Total</span><b>250</b></div><div class="metric"><span>On campus</span><b>238</b></div><div class="metric"><span>Checked out</span><b>12</b></div><div class="metric"><span>Dinner</span><b>'+meals()+'</b></div></div><div class="divider"></div>'+state.guardianEscalations.map(x=>'<div class="notice"><span class="tag guardian">[Guardian Escalation]</span> '+esc(x.id)+' · '+esc(x.category)+'</div>').join(""));if(t[0]==="warden-passes")return head(s,t)+card('<h3>Gate Pass Approval Queue</h3><table><thead><tr><th>Pass</th><th>Student</th><th>Status</th><th>Actions</th></tr></thead><tbody>'+state.passes.map((x,i)=>'<tr><td>'+esc(x.id)+'</td><td>'+esc(x.student)+'</td><td>'+esc(x.status)+'</td><td><button class="ghost" onclick="approvePass('+i+')">Approve</button> <button class="ghost" onclick="rejectPass('+i+')">Reject</button></td></tr>').join("")+'</tbody></table>');return head(s,t)+card('<h3>Maintenance Dispatch &amp; SLA</h3><table><thead><tr><th>Ticket</th><th>Issue</th><th>Status</th><th>Action</th></tr></thead><tbody>'+state.tickets.map((x,i)=>'<tr><td>'+esc(x.id)+'</td><td>'+esc(x.title)+'</td><td>'+esc(x.status)+'</td><td><button class="ghost" onclick="setTicketStatus('+i+',\'Resolved\')">Mark Resolved</button> <button class="ghost" onclick="reassignTicket('+i+')">Reassign</button></td></tr>').join("")+'</tbody></table>')}
 
-function updateTicket(index, status) {
-  if (!state.tickets[index]) return;
-  state.tickets[index].status = status;
-  render();
-  showToast(state.tickets[index].id + " marked " + status + ".");
-}
+function gateTool(){const s=section("gate"),t=tab(s);if(t[0]==="verify")return head(s,t)+card('<h3>Verify Pass Code / OTP</h3><form onsubmit="verifyPass(event)" class="stack" style="max-width:600px"><input id="passCode" placeholder="Try 1042 or GP-1042" required><button class="primary">Verify Pass</button></form><div id="verifyResult" class="notice" style="margin-top:12px">Awaiting verification.</div>');return head(s,t)+card('<h3>Live Departure Log</h3><button class="utility" onclick="gateCheckout()">Log Rohan Das Checkout</button><div class="divider"></div><table><thead><tr><th>Pass</th><th>Student</th><th>Action</th><th>Time</th></tr></thead><tbody>'+state.gateLog.map(x=>'<tr><td>'+esc(x.pass)+'</td><td>'+esc(x.student)+'</td><td>'+esc(x.action)+'</td><td>'+esc(x.time)+'</td></tr>').join("")+'</tbody></table>')}
 
-function reassignTicket(index) {
-  if (!state.tickets[index]) return;
-  showToast(state.tickets[index].id + " reassigned to campus maintenance.");
-}
+function offgridTool(){const s=section("offgrid"),t=tab(s);if(t[0]==="network")return head(s,t)+card('<h3>Network Mode (Offline Sim)</h3><div class="'+(state.offlineMode?"warning":"success")+'">'+(state.offlineMode?"Offline / 2G simulation active.":"Online mode active; fallback channels ready.")+'</div><button class="primary" style="margin-top:13px" onclick="toggleOffline()">'+(state.offlineMode?"Restore Online":"Enable Offline / 2G")+'</button>');return head(s,t)+card('<h3>SMS / USSD Terminal</h3><div id="termOut" class="terminal">READY · TYPE HELP FOR COMMANDS</div><form onsubmit="terminal(event)" style="display:flex;gap:7px;margin-top:9px"><input id="termIn" placeholder="STATUS / MESS / PASS / SOS / HELP"><button class="primary">Send</button></form>')}
 
-function setAnnouncementFilter(filter) {
-  state.announcementFilter = filter;
-  render();
-}
+function parentTool(){const s=section("parent"),t=tab(s);if(!state.isParentLoggedIn)return head(s,t)+parentGuard();switch(t[0]){case"ward-overview":return parentOverview();case"transit":return parentTransit();case"nutrition":return parentNutrition();case"parent-academics":return parentAcademics();case"ward-issues":return parentIssues();case"parent-grievance":return parentGrievance();default:return parentOverview()}}
 
-function bookResource(resource) {
-  state.bookings.unshift({
-    resource: resource,
-    time: "Requested · pending approval",
-    owner: "Current student",
-    status: "Pending"
-  });
-  render();
-  showToast(resource + " booking request submitted.");
-}
-
-function verifyOtp(event) {
-  if (event) event.preventDefault();
-  const input = document.getElementById("otpInput");
-  const result = document.getElementById("otpResult");
-  if (!input || !result) return;
-  const value = input.value.trim();
-  if (value === "1042") {
-    result.className = "success";
-    result.textContent = "Verified: GP-1042 belongs to Priya Mohanty · B-214 · Family visit.";
-  } else if (value === "1038") {
-    result.className = "success";
-    result.textContent = "Verified: GP-1038 belongs to Aarav Sharma · A-118 · Medical appointment.";
-  } else {
-    result.className = "danger";
-    result.textContent = "Pass not verified. Check the OTP / pass ID and try again.";
-  }
-}
-
-function gateCheckout(student, pass) {
-  state.gateLog.unshift({
-    pass: pass,
-    student: student,
-    action: "Checkout",
-    time: new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })
-  });
-  render();
-  showToast(student + " checkout logged.");
-}
-
-function toggleOfflineMode() {
-  state.offlineMode = !state.offlineMode;
-  render();
-  showToast(state.offlineMode ? "Off-grid / 2G fallback enabled." : "Online network mode restored.");
-}
-
-function unlockWarden(event) {
-  if (event) event.preventDefault();
-  const input = document.getElementById("wardenPin");
-  if (!input) return;
-  if (input.value === "1234") {
-    state.wardenUnlocked = true;
-    render();
-    showToast("Warden Command unlocked.");
-  } else {
-    showToast("Incorrect PIN.");
-  }
-}
-
-function lockWarden() {
-  state.wardenUnlocked = false;
-  render();
-}
-
-function resolveTicket(index) {
-  updateTicket(index, "Resolved");
-}
-
-function dispatchMaintenance(index) {
-  if (!state.tickets[index]) return;
-  state.tickets[index].status = "In Progress";
-  render();
-  showToast("Maintenance dispatch sent for " + state.tickets[index].id + ".");
-}
-
-/* ----------------------------- View helpers ----------------------------- */
-
-function pageHeader(kicker, title, description) {
-  return '<div class="view-head">' +
-    '<div><div class="eyebrow">' + escapeHtml(kicker) + '</div>' +
-    '<h2>' + escapeHtml(title) + '</h2>' +
-    '<p>' + escapeHtml(description) + '</p></div>' +
-    '</div>';
-}
-
-function academicsView() {
-  const overall = aggregateAttendance();
-  const subjectsHtml = state.subjects.map(function (subject) {
-    const pct = attendancePercent(subject);
-    const warning = pct < 75 ? '<span class="warning">Below 75%</span>' : '<span class="tag green">On track</span>';
-    return '<div class="subject">' +
-      '<div><div class="subject-title">' + escapeHtml(subject.n) + '</div>' +
-      '<div class="meta">' + subject.att + ' / ' + subject.tot + ' classes · ' + escapeHtml(subject.grade) + ' · ' + subject.credits + ' credits</div>' +
-      '<div class="subject-bar"><div class="subject-fill" style="width:' + pct + '%"></div></div></div>' +
-      '<div class="subject-pct">' + pct + '%<br>' + warning + '</div>' +
-      '</div>';
-  }).join("");
-
-  return pageHeader("Student view", "Academics & Attendance", "Attendance, academic performance, BPUT projection, and today’s class schedule.") +
-    '<div class="grid">' +
-      '<section class="card col-7">' +
-        '<h3>Attendance Overview</h3>' +
-        '<div class="ring-wrap">' +
-          '<div class="ring"><div class="ring-content"><strong>' + overall + '%</strong><span>aggregate attendance</span></div></div>' +
-          '<div class="stack" style="flex:1">' +
-            '<div class="metrics">' +
-              '<div class="metric"><div class="label">Attendance</div><div class="value">' + overall + '%</div></div>' +
-              '<div class="metric"><div class="label">Target</div><div class="value">75%</div></div>' +
-            '</div>' +
-            '<div class="notice"><strong>BPUT 75% rule:</strong> maintain at least 75% attendance for regular eligibility. Current aggregate is ' + overall + '%.</div>' +
-          '</div>' +
-        '</div>' +
-      '</section>' +
-
-      '<section class="card col-5">' +
-        '<h3>Predictive Attendance</h3>' +
-        '<div class="metrics">' +
-          '<div class="metric"><div class="label">After 2 classes</div><div class="value">74.2%</div></div>' +
-          '<div class="metric"><div class="label">After 5 classes</div><div class="value">69.8%</div></div>' +
-          '<div class="metric"><div class="label">Classes needed</div><div class="value">4</div></div>' +
-          '<div class="metric"><div class="label">CGPA</div><div class="value">8.64</div></div>' +
-        '</div>' +
-        '<div class="meta" style="margin-top:10px">SGPA 8.40 · Current semester credits tracked in the academic record.</div>' +
-      '</section>' +
-
-      '<section class="card col-7">' +
-        '<h3>Subject Breakdown</h3>' +
-        subjectsHtml +
-      '</section>' +
-
-      '<section class="card col-5">' +
-        '<h3>Academic Snapshot</h3>' +
-        '<div class="stack">' +
-          '<div class="row"><span class="muted">Current SGPA</span><strong>8.40</strong></div>' +
-          '<div class="row"><span class="muted">Current CGPA</span><strong>8.64</strong></div>' +
-          '<div class="row"><span class="muted">Credits this term</span><strong>22</strong></div>' +
-          '<div class="row"><span class="muted">Attendance target</span><strong>75%</strong></div>' +
-        '</div>' +
-      '</section>' +
-
-      '<section class="card col-12">' +
-        '<h3>Today’s Timetable</h3>' +
-        '<div class="timeline">' +
-          '<div class="timeline-item"><div class="time">8:00 – 10:45 AM</div><div><strong>Chemistry Lab</strong><div class="meta">Room: Chem Lab</div></div></div>' +
-          '<div class="timeline-item"><div class="time">10:45 – 11:40 AM</div><div><strong>Break / Recess</strong></div></div>' +
-          '<div class="timeline-item"><div class="time">11:40 AM – 12:35 PM</div><div><strong>Basic Electrical (BE)</strong><div class="meta">Room: LH-1</div></div></div>' +
-          '<div class="timeline-item"><div class="time">12:35 – 1:30 PM</div><div><strong>Programming in C &amp; DS</strong><div class="meta">Room: LH-3</div></div></div>' +
-          '<div class="timeline-item"><div class="time">1:30 – 2:25 PM</div><div><strong>Basic Civil Engineering (BCE)</strong><div class="meta">Room: LH-2</div></div></div>' +
-        '</div>' +
-      '</section>' +
-    '</div>';
-}
-
-function hostelView() {
-  const skipChecked = state.studentSkippingDinner ? " checked" : "";
-  return pageHeader("Student services", "Hostel & Living", "Gate pass, room information, dining routine, and daily mess headcount.") +
-    '<div class="grid">' +
-      '<section class="card col-7">' +
-        '<h3>Gate Pass / Outing Request</h3>' +
-        '<form id="passForm" onsubmit="submitPass(event)">' +
-          '<div class="form-grid">' +
-            '<label class="field">Student name<input name="student" required placeholder="Your name"></label>' +
-            '<label class="field">Room<input name="room" value="B-214" required></label>' +
-            '<label class="field full">Purpose<select name="purpose"><option>Family visit</option><option>Medical appointment</option><option>Personal work</option><option>Academic activity</option></select></label>' +
-            '<div class="full"><button class="primary" type="submit">Submit outing request</button></div>' +
-          '</div>' +
-        '</form>' +
-      '</section>' +
-
-      '<section class="card col-5">' +
-        '<h3>Hostel Snapshot</h3>' +
-        '<div class="metrics">' +
-          '<div class="metric"><div class="label">Room</div><div class="value">B-214</div></div>' +
-          '<div class="metric"><div class="label">Floor</div><div class="value">2</div></div>' +
-          '<div class="metric"><div class="label">Status</div><div class="value" style="font-size:16px">Active</div></div>' +
-          '<div class="metric"><div class="label">Warden</div><div class="value" style="font-size:16px">On duty</div></div>' +
-        '</div>' +
-      '</section>' +
-
-      '<section class="card col-7">' +
-        '<h3>Mess &amp; Canteen Dining Routine</h3>' +
-        '<div class="timeline">' +
-          '<div class="timeline-item"><div class="time">7:00–8:00 AM</div><div><strong>Breakfast</strong></div></div>' +
-          '<div class="timeline-item"><div class="time">2:30–3:30 PM</div><div><strong>Lunch</strong></div></div>' +
-          '<div class="timeline-item"><div class="time">5:00–5:45 PM</div><div><strong>Snacks</strong></div></div>' +
-          '<div class="timeline-item"><div class="time">8:00–9:30 PM</div><div><strong>Dinner</strong></div></div>' +
-        '</div>' +
-      '</section>' +
-
-      '<section class="card col-5">' +
-        '<h3>Dinner Headcount</h3>' +
-        '<div class="success" style="margin-bottom:12px">' + escapeHtml(mealOptOutMessage()) + '</div>' +
-        '<label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:#EDEDF2;font-size:13.5px">' +
-          '<input type="checkbox" id="skipDinnerCheck" onchange="toggleSkipDinner(this.checked)" style="accent-color:#C2410C;width:16px;height:16px"' + skipChecked + '>' +
-          ' I will NOT be eating dinner today (Opt-out)' +
-        '</label>' +
-        '<div class="meta" style="margin-top:6px;color:#9BA3B2">Help reduce food waste: If you are eating outside or skipping, check this box by 6:00 PM.</div>' +
-        '<div class="divider"></div>' +
-        '<div class="row"><span class="muted">Total hostellers</span><strong>250</strong></div>' +
-        '<div class="row"><span class="muted">Opted out</span><strong>' + state.studentsSkippingDinner + '</strong></div>' +
-        '<div class="row"><span class="muted">Approved leave</span><strong>' + state.onLeave + '</strong></div>' +
-      '</section>' +
-
-      '<section class="card col-12">' +
-        '<h3>My Recent Gate Passes</h3>' +
-        '<table><thead><tr><th>Pass</th><th>Purpose</th><th>Status</th></tr></thead><tbody>' +
-        state.passes.slice(0, 5).map(function (pass) {
-          const cls = pass.status === "Approved" ? "green" : pass.status === "Rejected" ? "red" : "ochre";
-          return '<tr><td><strong>' + escapeHtml(pass.id) + '</strong><div class="meta">' + escapeHtml(pass.student) + '</div></td><td>' + escapeHtml(pass.purpose) + '</td><td><span class="tag ' + cls + '">' + escapeHtml(pass.status) + '</span></td></tr>';
-        }).join("") +
-        '</tbody></table>' +
-      '</section>' +
-    '</div>';
-}
-
-function grievancesView() {
-  return pageHeader("Campus services", "Campus Grievances & Repairs", "One reporting workflow for hostellers and day scholars.") +
-    '<div class="grid">' +
-      '<section class="card col-7">' +
-        '<h3>Report an Issue</h3>' +
-        '<form id="ticketForm" onsubmit="submitTicket(event)">' +
-          '<div class="form-grid">' +
-            '<label class="field">Category<select id="mCat" name="category">' +
-              '<option>Hostel Maintenance</option><option>Classroom Infrastructure</option><option>Lab Equipment</option>' +
-              '<option>Canteen Hygiene</option><option>Campus Wi-Fi</option><option>Anti-Ragging/Noise</option><option>Others</option>' +
-            '</select></label>' +
-            '<label class="field">Issue title<input name="title" required placeholder="Brief issue title"></label>' +
-            '<label class="field full">Details<textarea name="details" placeholder="Describe the issue, location, and any useful context."></textarea></label>' +
-            '<label style="display:flex;align-items:center;gap:8px;color:#EDEDF2;font-size:13px" class="full"><input type="checkbox" name="anonymous" style="accent-color:#C2410C;width:16px;height:16px"> Submit anonymously</label>' +
-            '<div class="full"><button class="primary" type="submit">Submit grievance</button></div>' +
-          '</div>' +
-        '</form>' +
-      '</section>' +
-
-      '<section class="card col-5">' +
-        '<h3>Service Routing</h3>' +
-        '<div class="stack">' +
-          '<div class="row"><span class="muted">Hostel Maintenance</span><span class="tag">Estates</span></div>' +
-          '<div class="row"><span class="muted">Classroom Infrastructure</span><span class="tag">Facilities</span></div>' +
-          '<div class="row"><span class="muted">Lab Equipment</span><span class="tag">Lab Support</span></div>' +
-          '<div class="row"><span class="muted">Canteen Hygiene</span><span class="tag">Food Services</span></div>' +
-          '<div class="row"><span class="muted">Campus Wi-Fi</span><span class="tag">IT Helpdesk</span></div>' +
-          '<div class="row"><span class="muted">Anti-Ragging/Noise</span><span class="tag">Student Affairs</span></div>' +
-          '<div class="row"><span class="muted">Others</span><span class="tag">Central Desk</span></div>' +
-        '</div>' +
-      '</section>' +
-
-      '<section class="card col-12">' +
-        '<div class="row"><h3 style="margin:0">Ticket History</h3><span class="meta">' + state.tickets.length + ' tracked tickets</span></div>' +
-        '<div class="divider"></div>' +
-        '<table><thead><tr><th>Ticket</th><th>Category</th><th>Issue</th><th>Status</th><th>Actions</th></tr></thead><tbody>' +
-        state.tickets.map(function (ticket, index) {
-          const cls = ticket.status === "Resolved" ? "green" : ticket.status === "In Progress" ? "ochre" : "";
-          return '<tr>' +
-            '<td><strong>' + escapeHtml(ticket.id) + '</strong><div class="meta">' + escapeHtml(ticket.age) + '</div></td>' +
-            '<td>' + escapeHtml(ticket.category) + '</td>' +
-            '<td>' + escapeHtml(ticket.title) + '</td>' +
-            '<td><span class="tag ' + cls + '">' + escapeHtml(ticket.status) + '</span></td>' +
-            '<td><div style="display:flex;gap:6px;flex-wrap:wrap">' +
-              '<button class="ghost" type="button" onclick="resolveTicket(' + index + ')">Mark Resolved</button>' +
-              '<button class="ghost" type="button" onclick="reassignTicket(' + index + ')">Reassign</button>' +
-              '<button class="ghost" type="button" onclick="dispatchMaintenance(' + index + ')">Mark In Progress</button>' +
-            '</div></td>' +
-          '</tr>';
-        }).join("") +
-        '</tbody></table>' +
-      '</section>' +
-    '</div>';
-}
-
-function announcementsView() {
-  const filters = ["All", "Academic", "Hostel", "Administrative", "Emergency"];
-  const visible = state.announcements.filter(function (item) {
-    return state.announcementFilter === "All" || item.category === state.announcementFilter;
-  });
-
-  return pageHeader("Campus information", "Announcements & Facilities", "Official circulars, notices, and bookable campus resources.") +
-    '<div class="grid">' +
-      '<section class="card col-8">' +
-        '<h3>Official Circulars &amp; Notices</h3>' +
-        '<div class="filters">' +
-          filters.map(function (filter) {
-            return '<button type="button" class="' + (state.announcementFilter === filter ? "active" : "") + '" onclick="setAnnouncementFilter(\'' + filter + '\')">' + filter + '</button>';
-          }).join("") +
-        '</div>' +
-        '<div class="stack">' +
-          visible.map(function (item) {
-            return '<article class="card" style="padding:13px;background:#1B1E28">' +
-              '<div class="row"><span class="tag">' + escapeHtml(item.category) + '</span><span class="meta">' + escapeHtml(item.date) + '</span></div>' +
-              '<h4 style="margin-top:9px">' + escapeHtml(item.title) + '</h4>' +
-              '<div class="meta">' + escapeHtml(item.body) + '</div>' +
-            '</article>';
-          }).join("") ||
-          '<div class="empty">No notices match this filter.</div>' +
-        '</div>' +
-      '</section>' +
-
-      '<section class="card col-4">' +
-        '<h3>Facility Booking</h3>' +
-        '<div class="stack">' +
-          '<div class="card" style="padding:13px;background:#1B1E28"><div class="row"><strong>Seminar Hall</strong><span class="tag green">Available</span></div><div class="meta" style="margin:8px 0">Large room · AV enabled</div><button class="utility-btn" type="button" onclick="bookResource(\'Seminar Hall\')">Book</button></div>' +
-          '<div class="card" style="padding:13px;background:#1B1E28"><div class="row"><strong>Projector Room</strong><span class="tag green">Available</span></div><div class="meta" style="margin:8px 0">Projector + presentation setup</div><button class="utility-btn" type="button" onclick="bookResource(\'Projector Room\')">Book</button></div>' +
-          '<div class="card" style="padding:13px;background:#1B1E28"><div class="row"><strong>Club Lawn</strong><span class="tag green">Available</span></div><div class="meta" style="margin:8px 0">Outdoor student activity space</div><button class="utility-btn" type="button" onclick="bookResource(\'Club Lawn\')">Book</button></div>' +
-        '</div>' +
-      '</section>' +
-
-      '<section class="card col-12">' +
-        '<h3>Current Booking Requests</h3>' +
-        '<table><thead><tr><th>Resource</th><th>Time</th><th>Owner</th><th>Status</th></tr></thead><tbody>' +
-        state.bookings.map(function (booking) {
-          return '<tr><td>' + escapeHtml(booking.resource) + '</td><td>' + escapeHtml(booking.time) + '</td><td>' + escapeHtml(booking.owner) + '</td><td><span class="tag ' + (booking.status === "Confirmed" ? "green" : "ochre") + '">' + escapeHtml(booking.status) + '</span></td></tr>';
-        }).join("") +
-        '</tbody></table>' +
-      '</section>' +
-    '</div>';
-}
-
-function wardenView() {
-  if (!state.wardenUnlocked) {
-    return pageHeader("Staff view", "Warden Command", "Residence headcount, meal planning, approvals, and maintenance dispatch.") +
-      '<div class="grid"><section class="card col-5">' +
-        '<h3>Secure Warden Access</h3>' +
-        '<p class="meta">Enter the demo PIN to open command controls.</p>' +
-        '<form onsubmit="unlockWarden(event)" class="stack">' +
-          '<label class="field">Warden PIN<input id="wardenPin" type="password" inputmode="numeric" placeholder="1234"></label>' +
-          '<button class="primary" type="submit">Unlock Warden Command</button>' +
-        '</form>' +
-      '</section><section class="card col-7"><h3>Operational Summary</h3>' +
-        '<div class="metrics"><div class="metric"><div class="label">Total hostellers</div><div class="value">250</div></div>' +
-        '<div class="metric"><div class="label">On campus</div><div class="value">238</div></div>' +
-        '<div class="metric"><div class="label">Checked out</div><div class="value">12</div></div>' +
-        '<div class="metric"><div class="label">Dinner forecast</div><div class="value">' + projectedMeals() + '</div></div></div>' +
-      '</section></div>';
-  }
-
-  return pageHeader("Staff view", "Warden Command", "Residence headcount, meal planning, approvals, and maintenance dispatch.") +
-    '<div class="grid">' +
-      '<section class="card col-12"><div class="row"><h3 style="margin:0">Residence Headcount</h3><button class="ghost" type="button" onclick="lockWarden()">Lock</button></div><div class="metrics" style="margin-top:12px">' +
-        '<div class="metric"><div class="label">Total hostellers</div><div class="value">250</div></div>' +
-        '<div class="metric"><div class="label">On campus</div><div class="value">238</div></div>' +
-        '<div class="metric"><div class="label">Checked out</div><div class="value">12</div></div>' +
-        '<div class="metric"><div class="label">Dinner forecast</div><div class="value">' + projectedMeals() + '</div></div>' +
-      '</div><div class="success" style="margin-top:12px">' + escapeHtml(mealOptOutMessage()) + '</div></section>' +
-
-      '<section class="card col-7"><h3>Gate Pass Approval Queue</h3>' +
-        '<table><thead><tr><th>Pass</th><th>Student</th><th>Purpose</th><th>Status</th><th>Actions</th></tr></thead><tbody>' +
-        state.passes.map(function (pass, index) {
-          return '<tr><td><strong>' + escapeHtml(pass.id) + '</strong><div class="meta">' + escapeHtml(pass.room) + '</div></td>' +
-            '<td>' + escapeHtml(pass.student) + '</td><td>' + escapeHtml(pass.purpose) + '</td>' +
-            '<td><span class="tag ' + (pass.status === "Approved" ? "green" : pass.status === "Rejected" ? "red" : "ochre") + '">' + escapeHtml(pass.status) + '</span></td>' +
-            '<td><div style="display:flex;gap:6px;flex-wrap:wrap">' +
-            '<button class="ghost" type="button" onclick="approvePass(' + index + ')">Approve</button>' +
-            '<button class="ghost" type="button" onclick="rejectPass(' + index + ')">Reject</button>' +
-            '</div></td></tr>';
-        }).join("") +
-        '</tbody></table>' +
-      '</section>' +
-
-      '<section class="card col-5"><h3>Maintenance Dispatch</h3><div class="stack">' +
-        state.tickets.slice(0, 4).map(function (ticket, index) {
-          return '<div class="card" style="padding:12px;background:#1B1E28"><div class="row"><strong>' + escapeHtml(ticket.id) + '</strong><span class="tag ' + (ticket.age === "now" ? "green" : "ochre") + '">' + escapeHtml(ticket.age) + '</span></div>' +
-            '<div style="margin:7px 0;font-size:13px">' + escapeHtml(ticket.title) + '</div>' +
-            '<div class="meta" style="margin-bottom:8px">' + escapeHtml(ticket.category) + '</div>' +
-            '<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="ghost" type="button" onclick="resolveTicket(' + index + ')">Mark Resolved</button><button class="ghost" type="button" onclick="reassignTicket(' + index + ')">Reassign</button><button class="ghost" type="button" onclick="dispatchMaintenance(' + index + ')">Mark In Progress</button></div></div>';
-        }).join("") +
-      '</div></section>' +
-
-      '<section class="card col-12"><h3>Legacy ERP Migration</h3><div class="row"><div><strong>Residence records</strong><div class="meta">Migration utility remains available for older campus records.</div></div><button class="utility-btn" type="button" onclick="showToast(\'Legacy ERP migration queued.\')">Legacy ERP Migration</button></div></section>' +
-    '</div>';
-}
-
-function gateView() {
-  return pageHeader("Security desk", "Gate Checkpoint", "Verify an OTP / pass ID and keep a simple checkout log.") +
-    '<div class="grid">' +
-      '<section class="card col-5"><h3>Verify Pass</h3>' +
-        '<form onsubmit="verifyOtp(event)" class="stack">' +
-          '<label class="field">OTP / Pass ID<input id="otpInput" inputmode="numeric" placeholder="Demo: 1042 or 1038" required></label>' +
-          '<button class="primary" type="submit">Verify Pass</button>' +
-        '</form>' +
-        '<div id="otpResult" class="meta" style="margin-top:12px">Waiting for verification.</div>' +
-      '</section>' +
-
-      '<section class="card col-7"><h3>Quick Checkouts</h3><div class="stack">' +
-        '<div class="row"><div><strong>Priya Mohanty</strong><div class="meta">GP-1042 · B-214 · Family visit</div></div><button class="utility-btn" type="button" onclick="gateCheckout(\'Priya Mohanty\',\'GP-1042\')">Log Checkout</button></div>' +
-        '<div class="row"><div><strong>Aarav Sharma</strong><div class="meta">GP-1038 · A-118 · Medical appointment</div></div><button class="utility-btn" type="button" onclick="gateCheckout(\'Aarav Sharma\',\'GP-1038\')">Log Checkout</button></div>' +
-      '</div></section>' +
-
-      '<section class="card col-12"><h3>Checkout Log</h3>' +
-        '<table><thead><tr><th>Pass</th><th>Student</th><th>Action</th><th>Time</th></tr></thead><tbody>' +
-        state.gateLog.map(function (entry) {
-          return '<tr><td><strong>' + escapeHtml(entry.pass) + '</strong></td><td>' + escapeHtml(entry.student) + '</td><td><span class="tag green">' + escapeHtml(entry.action) + '</span></td><td>' + escapeHtml(entry.time) + '</td></tr>';
-        }).join("") +
-        '</tbody></table>' +
-      '</section>' +
-    '</div>';
-}
-
-function offgridView() {
-  return pageHeader("Resilience", "Off-Grid Resilience", "Keep essential campus workflows available during weak connectivity, 2G, or temporary outages.") +
-    '<div class="grid">' +
-      '<section class="card col-5"><h3>Network Mode</h3>' +
-        '<div class="' + (state.offlineMode ? "notice" : "success") + '">' +
-          (state.offlineMode ? "<strong>Offline / 2G fallback active.</strong>" : "<strong>Online network mode active.</strong>") +
-        '</div>' +
-        '<div style="margin-top:12px"><button class="primary" type="button" onclick="toggleOfflineMode()">' + (state.offlineMode ? "Restore Online Mode" : "Enable Offline / 2G Mode") + '</button></div>' +
-      '</section>' +
-
-      '<section class="card col-7"><h3>Fallback Channels</h3><div class="metrics">' +
-        '<div class="metric"><div class="label">SMS</div><div class="value">Ready</div></div>' +
-        '<div class="metric"><div class="label">USSD</div><div class="value">Ready</div></div>' +
-        '<div class="metric"><div class="label">2G sync</div><div class="value">Ready</div></div>' +
-        '<div class="metric"><div class="label">Local queue</div><div class="value">Ready</div></div>' +
-      '</div></section>' +
-
-      '<section class="card col-12"><h3>Available Offline Workflows</h3>' +
-        '<table><thead><tr><th>Workflow</th><th>Fallback</th><th>Use</th></tr></thead><tbody>' +
-          '<tr><td><strong>Gate pass verification</strong></td><td><span class="tag green">SMS / local</span></td><td class="meta">Verify essential pass records when network quality is poor.</td></tr>' +
-          '<tr><td><strong>Medical SOS</strong></td><td><span class="tag green">SMS</span></td><td class="meta">Send an urgent alert to the campus medical desk.</td></tr>' +
-          '<tr><td><strong>Grievance intake</strong></td><td><span class="tag green">Local queue</span></td><td class="meta">Queue reports for synchronization when connectivity returns.</td></tr>' +
-          '<tr><td><strong>Mess headcount</strong></td><td><span class="tag green">USSD / SMS</span></td><td class="meta">Capture dinner opt-outs without full internet access.</td></tr>' +
-        '</tbody></table>' +
-      '</section>' +
-    '</div>';
-}
-
-/* ----------------------------- Render ----------------------------- */
-
-function renderNav() {
-  const nav = document.getElementById("nav");
-  if (!nav) return;
-  nav.innerHTML = NAV_ITEMS.map(function (item) {
-    return '<button type="button" class="' + (state.role === item[0] ? "active" : "") + '" onclick="setRole(\'' + item[0] + '\')">' + item[1] + '</button>';
-  }).join("");
-}
-
-function renderMain() {
-  const main = document.getElementById("main");
-  if (!main) return;
-
-  let html = "";
-  switch (state.role) {
-    case "hostel":
-      html = hostelView();
-      break;
-    case "grievances":
-      html = grievancesView();
-      break;
-    case "announcements":
-      html = announcementsView();
-      break;
-    case "warden":
-      html = wardenView();
-      break;
-    case "gate":
-      html = gateView();
-      break;
-    case "offgrid":
-      html = offgridView();
-      break;
-    case "academics":
-    default:
-      html = academicsView();
-      break;
-  }
-  main.innerHTML = html;
-}
-
-function render() {
-  renderNav();
-  renderMain();
-}
-
-/* ----------------------------- Safe startup ----------------------------- */
-
-document.addEventListener("DOMContentLoaded", function () {
-  try {
-    render();
-  } catch (error) {
-    const main = document.getElementById("main");
-    if (main) {
-      main.innerHTML =
-        '<section class="card"><h2>Campus Doer could not render this view.</h2>' +
-        '<p class="meta">A runtime error was caught during startup. Please refresh the page.</p></section>';
-    }
-    console.error("Campus Doer render error:", error);
-  }
-});
+function renderMain(){const s=section(state.activeSection),t=tab(s);if(s.id==="academics")document.getElementById("main").innerHTML=academicsTool();else if(s.id==="hostel")document.getElementById("main").innerHTML=hostelTool();else if(s.id==="grievances")document.getElementById("main").innerHTML=grievanceTool();else if(s.id==="announcements")document.getElementById("main").innerHTML=announcementTool();else if(s.id==="warden")document.getElementById("main").innerHTML=wardenTool();else if(s.id==="gate")document.getElementById("main").innerHTML=gateTool();else if(s.id==="offgrid")document.getElementById("main").innerHTML=offgridTool();else document.getElementById("main").innerHTML=parentTool()}
+function render(){const s=section(state.activeSection);if(!s.tabs.some(t=>t[0]===state.activeSubTab))state.activeSubTab=s.tabs[0][0];renderNav();renderMain();renderEditorialMenu()}
+document.addEventListener("DOMContentLoaded",()=>{try{render()}catch(e){console.error(e);document.getElementById("main").innerHTML='<section class="card"><h3>Render error caught</h3><div class="meta">Refresh to retry.</div></section>'}});
 </script>
 </body>
 </html>
