@@ -126,12 +126,22 @@ const state = {
   timetable:[{t:'9:00',s:'Data Structures',h:'LH-3',st:'Attended'},{t:'11:00',s:'Digital Logic',h:'LH-1',st:'Attended'},
              {t:'2:00',s:'DBMS Lab',h:'Lab-2',st:'Upcoming'}],
   attendance:71, mess:{Good:14,OK:5,Poor:2},
+  isAdminLoggedIn:false, adminPin:'1234',
 };
 
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
 function ageTag(a){return a>48?'bad':a>24?'warn':'ok';}
 function statusTag(s){return ['Resolved','Approved','Checked Out'].includes(s)?'ok':(s==='Rejected'?'bad':'warn');}
 function setRole(r){state.role=r; render();}
+function loginAdmin(enteredPin){
+  const err=document.getElementById('pinError');
+  if(enteredPin===state.adminPin){
+    state.isAdminLoggedIn=true; toast('Warden authenticated'); render();
+  } else if(err){
+    err.textContent='Incorrect PIN — access denied.'; err.style.display='block';
+  }
+}
+function logoutAdmin(){state.isAdminLoggedIn=false; toast('Logged out of Warden Command'); render();}
 function toggleTheme(){
   const html=document.documentElement;
   html.setAttribute('data-theme', html.getAttribute('data-theme')==='light'?'dark':'light');
@@ -243,9 +253,32 @@ function studentView(){
   </div>`;
 }
 
+function adminLockView(){
+  return `
+  <div class="card" style="max-width:360px;margin:40px auto;text-align:center">
+    <div style="width:44px;height:44px;border-radius:12px;background:var(--surface2);border:1px solid var(--line2);
+      display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="var(--accent)" stroke-width="1.8"/>
+      <path d="M8 11V8a4 4 0 018 0v3" stroke="var(--accent)" stroke-width="1.8"/></svg>
+    </div>
+    <h2 style="justify-content:center">Warden Command — Secure Access</h2>
+    <p class="meta" style="margin-bottom:4px">Enter your PIN to access institution-wide controls.</p>
+    <label>PIN</label>
+    <input id="adminPinIn" type="password" inputmode="numeric" maxlength="6" placeholder="••••"
+      onkeydown="if(event.key==='Enter')loginAdmin(document.getElementById('adminPinIn').value)" style="text-align:center;letter-spacing:.3em">
+    <p id="pinError" class="meta" style="display:none;color:var(--bad);margin-top:8px"></p>
+    <button class="primary" style="width:100%" onclick="loginAdmin(document.getElementById('adminPinIn').value)">Unlock Command Center</button>
+    <small class="hint">Demo PIN: 1234</small>
+  </div>`;
+}
 function adminView(){
+  if(!state.isAdminLoggedIn) return adminLockView();
   const pendingPass=state.passes.filter(p=>p.status==='Pending').length, openTix=state.tickets.filter(t=>t.status!=='Resolved').length;
   return `
+  <div class="card" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+    <span class="pill ok">● Warden Authenticated</span>
+    <button class="ghost" onclick="logoutAdmin()">Log Out</button>
+  </div>
   <div class="card"><h2>Command Summary</h2>
     <div class="grid4">
       <div class="metric"><b>${pendingPass}</b><span>Pending Passes</span></div>
