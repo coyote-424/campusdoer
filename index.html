@@ -344,13 +344,15 @@ const ROLES={
 const OWNER={academics:"Student, Dean / Principal or Campus Admin",hostel:"Student, Hostel Warden or Campus Admin",grievances:"Student, Hostel Warden or Campus Admin",announcements:"Any authenticated role",warden:"Hostel Warden or Campus Admin",gate:"Security Guard, Hostel Warden or Campus Admin",offgrid:"Student, Guard, Hostel Warden, HOD, Dean / Principal or Campus Admin",parent:"Parent / Guardian or Campus Admin",hod:"HOD or Campus Admin",dean:"Dean / Principal or Campus Admin"};
 
 const ROLE_PERMISSIONS={
-  admin:['Academics','Hostel','Grievances','Announcements','Warden','Gate','Off-Grid','Parent','HOD','Dean'],
+  // Academics is intentionally restricted to Student only.
+  admin:['Hostel','Grievances','Announcements','Warden','Gate','Off-Grid','Parent','HOD','Dean'],
   warden:['Warden','Hostel','Grievances','Announcements','Gate','Off-Grid'],
   student:['Academics','Hostel','Grievances','Announcements','Off-Grid'],
   guard:['Gate','Announcements','Off-Grid'],
   parent:['Parent','Announcements'],
   hod:['HOD','Announcements','Off-Grid'],
-  dean:['Dean','Academics','Announcements','Off-Grid']
+  // Dean / Principal has administrator-level access except Academics.
+  dean:['Hostel','Grievances','Announcements','Warden','Gate','Off-Grid','Parent','HOD','Dean']
 };
 function can(id){const x=sections.find(z=>z.id===id);return !!x&&ROLE_PERMISSIONS[Store.currentUser.role].includes(x.label)}
 function visibleSections(){return sections.filter(x=>can(x.id))}
